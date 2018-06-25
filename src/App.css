@@ -26,3 +26,43 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* TODO: Move this to the Main Assets Project */
+.pager {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.pager li {
+	display: inline-block;
+	border: 1px solid lightgray;
+}
+.pager li a {
+	display: block;
+}
+.pager li button.active {
+	background: blue;
+	color: white;
+}
+
+.btn.active,
+.btn.active:focus,
+.btn:focus,
+li.active .btn {
+	background: #00a19b;
+	color: white;
+}
+
+.btn:hover,
+.btn:hover:focus,
+li.active:hover {
+	background: #137875 !important;
+	color: white !important;
+}
+
+/* Filter group with arrows */
+
+
+body {
+	margin: 20px;
+}
