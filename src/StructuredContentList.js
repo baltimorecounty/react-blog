@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import BlogCardList from './BlogCardList/BlogCardList';
 import Pagination from 'react-paginate';
-import FilterList from './FilterList/FilterList';
 import FilterContainer from './FilterContainer/FilterContainer';
 import Loader from './Loader/Loader';
 import './App.css'
