@@ -5,7 +5,7 @@ const propTypes = {
 	contentItem: PropTypes.object.isRequired
 };
 
-export default class BlogCard extends React.Component {
+export default class BlogCardContent extends React.Component {
 	render() {
 		const {
 			Title,
@@ -20,7 +20,7 @@ export default class BlogCard extends React.Component {
 		} = this.props.contentItem;
 
 		return (
-			<div className="card card--blog">
+			<React.Fragment>
 				<div className="card-content-img-container">
 					<a href={Link}>
 						<img alt={ImageAlt} className="card-content-img" src={ImageUrl} />
@@ -41,9 +41,9 @@ export default class BlogCard extends React.Component {
 					<i className={`blog-widget-item-icon fa fa-5x ${CategoryIcon}`}></i>
 					<p>{Category}</p>
 				</div>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
 
-BlogCard.propTypes = propTypes;
+BlogCardContent.propTypes = propTypes;
