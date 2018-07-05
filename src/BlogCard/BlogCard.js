@@ -5,6 +5,18 @@ const propTypes = {
 	contentItem: PropTypes.object.isRequired
 };
 
+const getCategoryImage = (category) => {
+	switch(category) {
+		case "News":
+			return "/sebin/v/f/blog-default-news.jpg";
+		case "Programming and Events":
+			return "/sebin/t/i/blog-default-events.jpg";
+		case "Collection and Materials":
+		default:
+			return "/sebin/d/w/blog-default-reviews.jpg";
+	}
+};
+
 export default class BlogCard extends React.Component {
 	render() {
 		const {
@@ -19,11 +31,13 @@ export default class BlogCard extends React.Component {
 			ImageAlt
 		} = this.props.contentItem;
 
+		const postImage = ImageUrl || getCategoryImage(Category);
+
 		return (
 			<div className="card card--blog">
 				<div className="card-content-img-container">
 					<a href={Link}>
-						<img alt={ImageAlt} className="card-content-img" src={ImageUrl} />
+						<img alt={ImageAlt} className="card-content-img" src={`//www.bcpl.info${postImage}`} />
 					</a>
 				</div>
 				<div className="card-content">
