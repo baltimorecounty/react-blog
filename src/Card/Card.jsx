@@ -2,22 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-	cardType: PropTypes.string
+    cardType: PropTypes.string
 };
 
 const defaultProps = {
-	cardType: 'default'
+    cardType: 'default'
 };
 
-function Card({children, cardType}) {
-	return (
-		<div className={`card card--${cardType}`}>
-			{children}
-		</div>
-	);
+function Card({ children, cardType }) {
+    return <div className={`card card--${cardType}`}>{children}</div>;
 }
 
- Card.propTypes = propTypes;
- Card.defaultProps = defaultProps;
+Card.propTypes = propTypes;
+Card.defaultProps = defaultProps;
 
- export default Card;
+export default Card;
