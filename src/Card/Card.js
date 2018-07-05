@@ -2,22 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-	content: PropTypes.node,
-	containerClass: PropTypes.string
+	cardType: PropTypes.string
 };
 
-const defaultProps = {};
+const defaultProps = {
+	cardType: 'default'
+};
 
-export default class Card extends React.Component {
-	render() {
-		const { children, containerClass } = this.props;
-		return (
-			<div className={`card ${containerClass}`}>
-				{{children}}
-			</div>
-		);
-	}
+function Card({children, cardType}) {
+	return (
+		<div className={`card card--${cardType}`}>
+			{children}
+		</div>
+	);
 }
 
  Card.propTypes = propTypes;
  Card.defaultProps = defaultProps;
+
+ export default Card;
