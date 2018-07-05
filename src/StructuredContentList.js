@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import BlogCardList from './Blog/BlogCardList';
 import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
-import Loader from './Loader/Loader';
+import { Loader } from 'baltimorecounty-react-components';
 import './App.css'
 
 class StructureContentList extends Component {
