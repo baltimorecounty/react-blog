@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MultipleSelectFilter from '../Filter/MultipleSelectFilter';
+import './FilterContainer.css';
 
 const propTypes = {
 	title: PropTypes.string,
