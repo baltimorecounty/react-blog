@@ -68,11 +68,10 @@ export default class Filter extends React.Component {
 
         return (
             <div className="filter-list-container">
-                <h4 className="filter-toggle">
+                <h4 className="filter-toggle" onClick={this.toggleFilter}>
                     <span>{title}</span>
                     <i
                         className={`fa fa-${toggleClass}`}
-                        onClick={this.toggleFilter}
                         aria-hidden="true"
                     />
                 </h4>
