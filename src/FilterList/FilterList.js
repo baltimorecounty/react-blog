@@ -40,12 +40,13 @@ export default class FilterList extends React.Component {
 			<React.Fragment>
 				<ButtonGroup className="filter-group">
 					{this.props.filterList.map((item, itemIndex) =>
+						<h4>
 						<Button
 							key={itemIndex}
 							onClick={this.onButtonClick}
 							active={this.isActive(item)}>
 						{item.icon &&
-							<i className={`fa fa-icon ${item.icon}`}></i>} {item.name}</Button>)}
+							<i className={`fa fa-icon ${item.icon}`}></i>} {item.name}</Button>)</h4>}
 				</ButtonGroup>
 			</React.Fragment>
 		);
