@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import BlogCardList from './Blog/BlogCardList';
+import CardList from './Card/CardList';
 import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
 import { Loader } from 'baltimorecounty-react-components';
@@ -117,6 +117,7 @@ class StructureContentList extends Component {
     }
 
     render() {
+        const { cardContentComponent } = this.props;
         const { TotalPages, Results } = this.state.viewModel;
         const defaultButtonClasses = 'btn btn-default';
         return (
@@ -130,7 +131,11 @@ class StructureContentList extends Component {
                         />
                     </div>
                     <div className="col-md-9">
-                        <BlogCardList contentItems={Results.Contents} />
+                        <CardList
+                            contentType="blog"
+                            contentItems={Results.Contents}
+                            cardContentComponent={cardContentComponent}
+                        />
                         {this.state.isLoading && <Loader />}
                         {this.state.hasErrorGettingEntries && (
                             <p>
