@@ -43,10 +43,10 @@ export default class Filter extends React.Component {
                 selectedFilters
             },
             () => {
-                this.props.onChange(
-                    this.props.title,
-                    this.state.selectedFilters
-                );
+                this.props.onChange({
+					name: this.props.title,
+					values: this.state.selectedFilters
+				});
             }
         );
 	}
