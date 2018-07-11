@@ -24,10 +24,10 @@ class StructureContentList extends Component {
                     title: 'Category',
                     type: 'single',
                     options: [
-						{
+                        {
                             label: 'Show All Blog Categories',
-							value: 'all',
-							isCheckedByDefault: true
+                            value: 'all',
+                            isCheckedByDefault: true
                         },
                         {
                             label: 'Collection and Materials',
@@ -97,7 +97,7 @@ class StructureContentList extends Component {
     }
 
     onChange(filter) {
-		const { name, values } = filter;
+        const { name, values } = filter;
         this.setState(
             {
                 categoryFilter: values,
@@ -121,37 +121,43 @@ class StructureContentList extends Component {
         const defaultButtonClasses = 'btn btn-default';
         return (
             <div className="Blog">
-                <FilterContainer
-                    title="Blog Filters"
-                    filters={this.state.filters}
-                    onChange={this.onChange}
-                />
-                <BlogCardList contentItems={Results.Contents} />
-                {this.state.isLoading && <Loader />}
-                {this.state.hasErrorGettingEntries && (
-                    <p>
-                        There was a problem retrieving our Between the Covers
-                        posts. Please try again in a few minutes.
-                    </p>
-                )}
-                {TotalPages && (
-                    <Pagination
-                        previousLabel={'Previous'}
-                        nextLabel={'Next'}
-                        breakLabel={<a href="">...</a>}
-                        breakClassName={'break-me'}
-                        pageCount={TotalPages}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={5}
-                        onPageChange={this.onPageChange}
-                        containerClassName={'pager'}
-                        subContainerClassName={'pages pagination'}
-                        pageLinkClassName={defaultButtonClasses}
-                        previousLinkClassName={defaultButtonClasses}
-                        nextLinkClassName={defaultButtonClasses}
-                        activeClassName={'active'}
-                    />
-                )}
+                <div className="row">
+                    <div className="col-md-3">
+                        <FilterContainer
+                            title="Blog Filters"
+                            filters={this.state.filters}
+                            onChange={this.onChange}
+                        />
+                    </div>
+                    <div className="col-md-9">
+                        <BlogCardList contentItems={Results.Contents} />
+                        {this.state.isLoading && <Loader />}
+                        {this.state.hasErrorGettingEntries && (
+                            <p>
+                                There was a problem retrieving our Between the
+                                Covers posts. Please try again in a few minutes.
+                            </p>
+                        )}
+                        {TotalPages && (
+                            <Pagination
+                                previousLabel={'Previous'}
+                                nextLabel={'Next'}
+                                breakLabel={<a href="">...</a>}
+                                breakClassName={'break-me'}
+                                pageCount={TotalPages}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={this.onPageChange}
+                                containerClassName={'pager'}
+                                subContainerClassName={'pages pagination'}
+                                pageLinkClassName={defaultButtonClasses}
+                                previousLinkClassName={defaultButtonClasses}
+                                nextLinkClassName={defaultButtonClasses}
+                                activeClassName={'active'}
+                            />
+                        )}
+                    </div>
+                </div>
             </div>
         );
     }
