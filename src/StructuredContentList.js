@@ -16,7 +16,7 @@ class StructureContentList extends Component {
             },
             activePage: 1,
             categoryFilter: null,
-            baseUrl: 'http://localhost:54453/api/structured-content/blog',
+            baseUrl: this.props.baseUrl,
             isLoading: true,
             hasErrorGettingEntries: false,
             filters: this.props.filters.slice()

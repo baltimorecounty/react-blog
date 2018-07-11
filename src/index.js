@@ -33,6 +33,7 @@ const filters = [
 
 ReactDOM.render(
     <StructureContentList
+		baseUrl="http://localhost:54453/api/structured-content/blog"
         filters={filters}
         cardContentComponent={BlogCardContent}
     />,
