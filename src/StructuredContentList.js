@@ -40,7 +40,7 @@ class StructureContentList extends Component {
             filters: [
                 {
                     title: 'Category',
-                    type: 'single',
+                    type: 'multiple',
                     options: [
                         {
                             label: 'Collection and Materials',
@@ -109,11 +109,12 @@ class StructureContentList extends Component {
         return `${this.state.baseUrl}${queryString}`;
     }
 
-    onChange(filterCategory, filterValues) {
-        console.log(filterValues);
+    onChange(filter) {
+		const { name, values } = filter;
+        //console.log(filterValues);
         this.setState(
             {
-                categoryFilter: filterValues,
+                categoryFilter: values,
                 activePage: 1
             },
             this.getBlogEntries
