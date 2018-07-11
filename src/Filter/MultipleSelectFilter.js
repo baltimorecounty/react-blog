@@ -11,7 +11,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-    title: 'Filter',
     type: 'single'
 };
 
@@ -24,31 +23,28 @@ export default class MultipleSelectFilter extends React.Component {
     }
 
     render() {
-        const { options, title, type, name, onChange } = this.props;
-
-		console.log('type', type)
-
+		const { options, title, type, onChange } = this.props;
         return (
             <ul className="filter-list">
                 {options.map((option, index) => (
                     <li key={index}>
-						{type === 'single' && (
-                            <FilterRadioButton
-                                onClick={onChange}
-                                label={option.label}
-								value={option.value}
-								name={title}
-                            />
-                        )}
                         {type === 'multiple' && (
                             <FilterCheckbox
-								onClick={onChange}
+                                onClick={onChange}
+                                isDefault={option.default}
                                 label={option.label}
                                 value={option.value}
                             />
                         )}
                     </li>
-                ))}
+				))}
+				{type === 'single' && (
+					<FilterRadioButton
+						onChange={onChange}
+						options={options}
+						name={title}
+					/>
+				)}
             </ul>
         );
     }

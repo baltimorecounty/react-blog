@@ -15,13 +15,9 @@ const defaultProps = {
 };
 
 export default class FilterContainer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
     render() {
-        const { title, filters, onChange } = this.props;
+		const { title, filters, onChange } = this.props;
+
         return (
             <React.Fragment>
                 <div className="bc_filters filters">
@@ -30,9 +26,7 @@ export default class FilterContainer extends React.Component {
                         <Filter
                             onChange={onChange}
                             key={index}
-                            options={filter.options}
-                            title={filter.title}
-                            type={filter.type}
+                            filter={filter}
                         />
                     ))}{' '}
                     {/* We should be able to pass in another component? */}

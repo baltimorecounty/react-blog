@@ -7,61 +7,58 @@ import 'react-slidedown/lib/slidedown.css';
 
 const propTypes = {
     onChange: PropTypes.func,
-    options: PropTypes.array.isRequired,
-    title: PropTypes.string,
-    type: PropTypes.string
-};
-
-const defaultProps = {
-    type: 'single'
+    filter: PropTypes.object.isRequired
 };
 
 export default class Filter extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-			isExpanded: true,
-			selectedFilters: []
+            isExpanded: true,
+            selectedFilters: []
         };
 
-		this.toggleFilter = this.toggleFilter.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.updateFilters = this.updateFilters.bind(this);
     }
 
-	handleChange(filters) {
-		const { isSelected, value } = filters;
-        let selectedFilters = isSelected
-            ? [...this.state.selectedFilters, value]
-			: this.state.selectedFilters.filter(filter => filter !== value);
+    handleChange(filters) {
+        const { isSelected, value } = filters;
+        let selectedFilters =
+            this.props.filter.type === 'single'
+                ? (selectedFilters = [value])
+                : isSelected
+                    ? [...this.state.selectedFilters, value]
+                    : this.state.selectedFilters.filter(
+                          filter => filter !== value
+                      );
 
-		if (this.props.type === 'single') {
-			selectedFilters = [ value ]
-		}
+        this.updateFilters(selectedFilters);
+    }
 
+    toggleFilter() {
+        this.setState({
+            isExpanded: !this.state.isExpanded
+        });
+    }
+
+    updateFilters(selectedFilters) {
         this.setState(
             {
                 selectedFilters
             },
             () => {
                 this.props.onChange({
-					name: this.props.title,
-					values: this.state.selectedFilters
-				});
+                    name: this.props.title,
+                    values: this.state.selectedFilters
+                });
             }
         );
-	}
-
-
-
-    toggleFilter() {
-        this.setState({
-            isExpanded: !this.state.isExpanded
-        });
-	}
-
+    }
 
     render() {
-        const { options, title, type, onChange } = this.props;
+        const { options, title, type } = this.props.filter;
         const toggleClass = this.state.isExpanded
             ? 'minus-square'
             : 'plus-square';
@@ -70,10 +67,7 @@ export default class Filter extends React.Component {
             <div className="filter-list-container">
                 <h4 className="filter-toggle" onClick={this.toggleFilter}>
                     <span>{title}</span>
-                    <i
-                        className={`fa fa-${toggleClass}`}
-                        aria-hidden="true"
-                    />
+                    <i className={`fa fa-${toggleClass}`} aria-hidden="true" />
                 </h4>
                 <SlideDown
                     className={'filter-dropdown'}
@@ -81,8 +75,9 @@ export default class Filter extends React.Component {
                 >
                     <MultipleSelectFilter
                         onChange={this.handleChange}
-						options={options}
-						type={type}
+                        options={options}
+                        title={title}
+                        type={type}
                     />
                 </SlideDown>
             </div>
@@ -91,4 +86,3 @@ export default class Filter extends React.Component {
 }
 
 Filter.propTypes = propTypes;
-Filter.defaultProps = defaultProps;

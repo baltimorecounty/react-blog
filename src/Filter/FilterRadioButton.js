@@ -2,48 +2,67 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-    label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onClick: PropTypes.func,
-    icon: PropTypes.string
+    name: PropTypes.string.isRequired,
+    options: PropTypes.array.isRequired,
+    onChange: PropTypes.func
 };
-
-const defaultProps = {};
 
 export default class FilterRadioList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            isChecked: !!this.props.isDefault
+        };
 
-        this.handleClick = this.handleClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleClick(clickEvent) {
-		const { currentTarget } = clickEvent;
+    handleChange(clickEvent) {
+        const { checked, value } = clickEvent.currentTarget;
+        const adjustedValue =
+            value && value.toLowerCase().indexOf('all') > -1 ? '' : value;
 
-        this.props.onClick({
-            value: currentTarget.value,
-            isSelected: currentTarget.checked
-        });
+        this.setState(
+            {
+                isChecked: !!checked
+            },
+            () => {
+                this.props.onChange({
+                    value: adjustedValue,
+                    isSelected: this.state.isChecked
+                });
+            }
+        );
     }
 
     render() {
-        const { label, value, icon, name } = this.props;
+        const { options, name } = this.props;
+        const inputName = name.toLowerCase().replace(/\s/g, '-');
 
         return (
-            <label htmlFor={value}>
-                <input
-                    onClick={this.handleClick}
-                    type="radio"
-                    id={value}
-                    name={name}
-                    value={label}
-                />
-                <span>{label}</span>
-            </label>
+            <React.Fragment>
+                {options.map((option, index) => {
+                    const { label, value, icon, isCheckedByDefault } = option;
+                    return (
+                        <li key={index}>
+                            <label htmlFor={value}>
+                                {icon && <i className={`fa ${icon}`} />}
+                                <input
+                                    type="radio"
+                                    id={value}
+                                    name={inputName}
+                                    defaultChecked={isCheckedByDefault}
+                                    onChange={this.handleChange}
+                                    value={label}
+                                />
+                                <span>{label}</span>
+                            </label>
+                        </li>
+                    );
+                })}
+            </React.Fragment>
         );
     }
 }
 
 FilterRadioList.propTypes = propTypes;
-FilterRadioList.defaultProps = defaultProps;
