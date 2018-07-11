@@ -42,7 +42,7 @@ export default class MultipleSelectFilter extends React.Component {
                         )}
                         {type === 'multiple' && (
                             <FilterCheckbox
-                                onClick={this.handleFilterClick}
+								onClick={onChange}
                                 label={option.label}
                                 value={option.value}
                             />
