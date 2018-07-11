@@ -19,31 +19,7 @@ class StructureContentList extends Component {
             baseUrl: 'http://localhost:54453/api/structured-content/blog',
             isLoading: true,
             hasErrorGettingEntries: false,
-            filters: [
-                {
-                    title: 'Category',
-                    type: 'single',
-                    options: [
-                        {
-                            label: 'Show All Blog Categories',
-                            value: 'all',
-                            isCheckedByDefault: true
-                        },
-                        {
-                            label: 'Collection and Materials',
-                            value: 'collections-and-materials'
-                        },
-                        {
-                            label: 'News',
-                            value: 'news'
-                        },
-                        {
-                            label: 'Programming and Events',
-                            value: 'programming-and-events'
-                        }
-                    ]
-                }
-            ]
+            filters: this.props.filters.slice()
         };
 
         this.onPageChange = this.onPageChange.bind(this);
