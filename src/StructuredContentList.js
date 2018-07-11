@@ -15,24 +15,6 @@ class StructureContentList extends Component {
                 }
             },
             activePage: 1,
-            categories: [
-                {
-                    name: 'All Blog Posts',
-                    icon: 'fa-list-ul'
-                },
-                {
-                    name: 'Collection and Materials',
-                    icon: 'fa-book'
-                },
-                {
-                    name: 'News',
-                    icon: 'fa-bullhorn'
-                },
-                {
-                    name: 'Programming and Events',
-                    icon: 'fa-calendar-check-o'
-                }
-            ],
             categoryFilter: null,
             baseUrl: 'http://localhost:54453/api/structured-content/blog',
             isLoading: true,
@@ -40,8 +22,13 @@ class StructureContentList extends Component {
             filters: [
                 {
                     title: 'Category',
-                    type: 'multiple',
+                    type: 'single',
                     options: [
+						{
+                            label: 'Show All Blog Categories',
+							value: 'all',
+							isCheckedByDefault: true
+                        },
                         {
                             label: 'Collection and Materials',
                             value: 'collections-and-materials'
@@ -111,7 +98,6 @@ class StructureContentList extends Component {
 
     onChange(filter) {
 		const { name, values } = filter;
-        //console.log(filterValues);
         this.setState(
             {
                 categoryFilter: values,
