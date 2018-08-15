@@ -7,28 +7,9 @@ import BlogCardContent from './Blog/BlogCardContent';
 
 const filters = [
     {
-        title: 'Category',
-        type: 'single',
-        options: [
-            {
-                label: 'Show All Blog Categories',
-                value: 'all',
-                isCheckedByDefault: true
-            },
-            {
-                label: 'Collection and Materials',
-                value: 'collections-and-materials'
-            },
-            {
-                label: 'News',
-                value: 'news'
-            },
-            {
-                label: 'Programming and Events',
-                value: 'programming-and-events'
-            }
-        ]
-    }
+        field: 'Category',
+		type: 'radio'
+	}
 ];
 
 ReactDOM.render(
