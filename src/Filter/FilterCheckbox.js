@@ -28,15 +28,15 @@ export default class FilterCheckbox extends React.Component {
     }
 
     render() {
-        const { label, value, icon } = this.props;
+		const { label, value, icon, name } = this.props;
 
         return (
-            <label htmlFor={value}>
+            <label htmlFor={`radio-${name}-${value}`}>
                 {icon && <i className={`fa ${icon}`} />}
                 <input
                     onClick={this.handleClick}
                     type="checkbox"
-                    id={value}
+                    id={`radio-${name}-${value}`}
                     name={value}
                     value={label}
                 />
