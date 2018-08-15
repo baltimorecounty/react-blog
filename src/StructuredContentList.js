@@ -123,7 +123,7 @@ class StructureContentList extends Component {
 
     onChange(filter) {
 		const { field, values } = filter;
-		const newActiveFilters = Object.assign({}, this.state.activeFilters);
+		const newActiveFilters = {...this.state.activeFilters};
 
 		if (values.length) {
 			newActiveFilters[field] = values;
