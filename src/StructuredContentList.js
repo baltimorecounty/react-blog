@@ -4,6 +4,7 @@ import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
 import { Loader } from 'baltimorecounty-react-components';
 import './App.css';
+import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
 
 class StructureContentList extends Component {
     constructor(props) {
@@ -14,34 +15,66 @@ class StructureContentList extends Component {
                     Contents: []
                 }
             },
-            activePage: 1,
-            categoryFilter: null,
+            activePage: 0,
+            activeFilters: {},
             baseUrl: this.props.baseUrl,
             isLoading: true,
             hasErrorGettingEntries: false,
-            filters: this.props.filters.slice()
+            filters: this.props.filters
+                ? this.props.filters.map(filter => {
+                      filter.options = []; // ensure options
+                      return filter;
+                  })
+                : []
         };
 
         this.onPageChange = this.onPageChange.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.getFilterOptions = this.getFilterOptions.bind(this);
     }
 
     buildQueryString() {
-        const { categoryFilter } = this.state;
+		let queryString = this.buildFilterQueryString();
+        return queryString
+            ? `?page=${this.state.activePage}&${queryString}`
+            : `?page=${this.state.activePage}`;
+    }
 
-        const filterQueryString =
-            categoryFilter &&
-            categoryFilter.length &&
-            categoryFilter.filter(category => category.toLowerCase() !== 'all')
-                .length
-                ? `&Category=${categoryFilter}`
-                : '';
+    buildFilterQueryString() {
+		const { filters } = this.state;
+		const appliedFilters = {...this.state.activeFilters};
+		let filterParts = [];
 
-        return `?page=${this.state.activePage}${filterQueryString}`;
+		// filters are the distinct fields being returned, if there are some in teh app, these should always be added to teh query string
+		const activeFilterList = filters.map(filter => filter.field).join(',');
+		if (activeFilterList) {
+			filterParts.push(`filters=${activeFilterList}`);
+		}
+
+		const appliedFilterList = Object.keys(appliedFilters).map(appliedFilterKey => ({
+			key: appliedFilterKey,
+			value: appliedFilters[appliedFilterKey]
+		}));
+
+		if (appliedFilterList.length) {
+			let filterExpression = [];
+			appliedFilterList.forEach(filter => {
+				if (filter.value[0] && filter.value[0].toLowerCase() !== 'all') {
+					const expression = BuildFilterExpression(filter.key, Operators.Equal, filter.value[0]);
+					filterExpression.push(expression)
+				}
+			});
+
+			if (filterExpression.length) {
+				filterParts.push(`$filter=${filterExpression.join(` ${Operators.And} `)}`)
+			}
+		}
+
+        return filterParts.join('&');
     }
 
     componentDidMount() {
-        this.getBlogEntries(this.state.activePage);
+        this.getBlogEntries();
     }
 
     getBlogEntries() {
@@ -52,10 +85,13 @@ class StructureContentList extends Component {
 
         fetch(requestUrl)
             .then(response => response.json())
-            .then(blogViewModel => {
+            .then(contentViewModel => {
                 this.setState({
-                    viewModel: blogViewModel,
-                    isLoading: false
+                    viewModel: contentViewModel,
+                    isLoading: false,
+                    filters: this.getFilterOptions(
+                        contentViewModel.FilterValues
+                    )
                 });
             })
             .catch(error => {
@@ -72,14 +108,39 @@ class StructureContentList extends Component {
         return `${this.state.baseUrl}${queryString}`;
     }
 
+    getFilterOptions(filterValues) {
+        return this.state.filters.map(filter => {
+            filter.options = filterValues[filter.field];
+            if (filter.type === 'radio') {
+                filter.options.unshift({
+					label: 'Show All',
+					value: 'all'
+				});
+            }
+            return filter;
+        });
+    }
+
     onChange(filter) {
-        const { name, values } = filter;
+		const { field, values } = filter;
+		const newActiveFilters = Object.assign({}, this.state.activeFilters);
+
+		if (values.length) {
+			newActiveFilters[field] = values;
+		}
+		else {
+			delete newActiveFilters[field];
+		}
+
         this.setState(
             {
-                categoryFilter: values,
-                activePage: 1
-            },
-            this.getBlogEntries
+                activeFilters: newActiveFilters,
+                activePage: 0
+			},
+			() => {
+				this.getBlogEntries();
+			}
+
         );
     }
 
@@ -93,9 +154,11 @@ class StructureContentList extends Component {
     }
 
     render() {
+		const { activePage } = this.state;
         const { cardContentComponent } = this.props;
         const { TotalPages, Results } = this.state.viewModel;
-        const defaultButtonClasses = 'btn btn-default';
+		const defaultButtonClasses = 'btn btn-default';
+
         return (
             <div className="Blog">
                 <div className="row">
@@ -134,7 +197,8 @@ class StructureContentList extends Component {
                                 pageLinkClassName={defaultButtonClasses}
                                 previousLinkClassName={defaultButtonClasses}
                                 nextLinkClassName={defaultButtonClasses}
-                                activeClassName={'active'}
+								activeClassName={'active'}
+								forcePage={activePage}
                             />
                         )}
                     </div>
