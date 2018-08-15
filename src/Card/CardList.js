@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'baltimorecounty-react-components';
-import BlogCardContent from '../Blog/BlogCardContent';
 
 const propTypes = {
     contentType: PropTypes.string,
