@@ -11,7 +11,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    type: 'single'
+    type: 'radio'
 };
 
 export default class MultipleSelectFilter extends React.Component {
@@ -23,29 +23,32 @@ export default class MultipleSelectFilter extends React.Component {
     }
 
     render() {
-		const { options, title, type, onChange } = this.props;
+        const { options, title, type, onChange } = this.props;
         return (
-            <ul className="filter-list">
-                {options.map((option, index) => (
-                    <li key={index}>
-                        {type === 'multiple' && (
-                            <FilterCheckbox
-                                onClick={onChange}
-                                isDefault={option.default}
-                                label={option.label}
-                                value={option.value}
+            <React.Fragment>
+                {options && (
+                    <ul className="filter-list">
+                        {options.map((option, index) => (
+                            <li key={index}>
+                                {type === 'multiple' && (
+                                    <FilterCheckbox
+                                        onClick={onChange}
+                                        label={option.label}
+                                        value={option.value}
+                                    />
+                                )}
+                            </li>
+                        ))}
+                        {type === 'radio' && (
+                            <FilterRadioButton
+                                onChange={onChange}
+                                options={options}
+								name={title}
                             />
                         )}
-                    </li>
-				))}
-				{type === 'single' && (
-					<FilterRadioButton
-						onChange={onChange}
-						options={options}
-						name={title}
-					/>
-				)}
-            </ul>
+                    </ul>
+                )}
+            </React.Fragment>
         );
     }
 }
