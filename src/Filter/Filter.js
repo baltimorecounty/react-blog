@@ -26,8 +26,8 @@ export default class Filter extends React.Component {
     handleChange(filters) {
         const { isSelected, value } = filters;
         let selectedFilters =
-            this.props.filter.type === 'single'
-                ? (selectedFilters = [value])
+            this.props.filter.type === 'radio'
+                ? [value]
                 : isSelected
                     ? [...this.state.selectedFilters, value]
                     : this.state.selectedFilters.filter(
@@ -50,7 +50,7 @@ export default class Filter extends React.Component {
             },
             () => {
                 this.props.onChange({
-                    name: this.props.title,
+                    field: this.props.filter.field,
                     values: this.state.selectedFilters
                 });
             }
@@ -58,7 +58,7 @@ export default class Filter extends React.Component {
     }
 
     render() {
-        const { options, title, type } = this.props.filter;
+        const { options, field, type } = this.props.filter;
         const toggleClass = this.state.isExpanded
             ? 'minus-square'
             : 'plus-square';
@@ -66,7 +66,7 @@ export default class Filter extends React.Component {
         return (
             <div className="filter-list-container">
                 <h4 className="filter-toggle" onClick={this.toggleFilter}>
-                    <span>{title}</span>
+                    <span>{field}</span>
                     <i className={`fa fa-${toggleClass}`} aria-hidden="true" />
                 </h4>
                 <SlideDown
@@ -76,7 +76,7 @@ export default class Filter extends React.Component {
                     <MultipleSelectFilter
                         onChange={this.handleChange}
                         options={options}
-                        title={title}
+                        title={field}
                         type={type}
                     />
                 </SlideDown>
