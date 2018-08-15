@@ -37,21 +37,22 @@ export default class FilterRadioList extends React.Component {
 
     render() {
         const { options, name } = this.props;
-        const inputName = name.toLowerCase().replace(/\s/g, '-');
+        const inputName = `radio-${name.toLowerCase().replace(/\s/g, '-')}`;
 
         return (
             <React.Fragment>
                 {options.map((option, index) => {
-                    const { label, value, icon, isCheckedByDefault } = option;
+					const { label, value, icon } = option;
+					const labelName = `${inputName}-${label}`;
                     return (
                         <li key={index}>
-                            <label htmlFor={value}>
+                            <label htmlFor={labelName}>
                                 {icon && <i className={`fa ${icon}`} />}
                                 <input
                                     type="radio"
-                                    id={value}
+                                    id={labelName}
                                     name={inputName}
-                                    defaultChecked={isCheckedByDefault}
+                                    defaultChecked={value === 'all'}
                                     onChange={this.handleChange}
                                     value={label}
                                 />
