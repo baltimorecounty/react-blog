@@ -8,13 +8,13 @@ import BlogCardContent from './Blog/BlogCardContent';
 const filters = [
     {
         field: 'Category',
-		type: 'radio'
-	}
+        type: 'radio'
+    }
 ];
 
 ReactDOM.render(
     <StructureContentList
-		baseUrl="http://localhost:54453/api/structured-content/blog"
+        baseUrl="http://localhost:54453/api/structured-content/blog"
         filters={filters}
         cardContentComponent={BlogCardContent}
     />,
