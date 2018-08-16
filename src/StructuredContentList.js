@@ -31,61 +31,69 @@ class StructureContentList extends Component {
         this.onPageChange = this.onPageChange.bind(this);
         this.onChange = this.onChange.bind(this);
         this.getFilterOptions = this.getFilterOptions.bind(this);
-    }
-
-    buildQueryString() {
-        let queryString = this.buildFilterQueryString();
-        return queryString
-            ? `?page=${this.state.activePage}&${queryString}`
-            : `?page=${this.state.activePage}`;
+        this.getActiveFilters = this.getActiveFilters.bind(this);
+        this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
     }
 
     buildFilterQueryString() {
-        const { filters } = this.state;
-        const appliedFilters = { ...this.state.activeFilters };
-        let filterParts = [];
+        const activeFilters = this.getActiveFilters();
+        const appliedFilterQuery = this.getAppliedFiltersQuery();
+        let queryParams = [];
 
-        // filters are the distinct fields being returned, if there are some in teh app, these should always be added to teh query string
-        const activeFilterList = filters.map(filter => filter.field).join(',');
-        if (activeFilterList) {
-            filterParts.push(`filters=${activeFilterList}`);
+        if (activeFilters) {
+            queryParams.push(`filters=${activeFilters}`);
+        }
+        if (appliedFilterQuery) {
+            queryParams.push(`$filter=${appliedFilterQuery}`);
         }
 
-        const appliedFilterList = Object.keys(appliedFilters).map(
-            appliedFilterKey => ({
-                key: appliedFilterKey,
-                value: appliedFilters[appliedFilterKey]
-            })
-        );
+        return queryParams.join('&');
+    }
 
-        if (appliedFilterList.length) {
-            let filterExpression = [];
-            appliedFilterList.forEach(filter => {
-                if (
-                    filter.value[0] &&
-                    filter.value[0].toLowerCase() !== 'all'
-                ) {
-                    const expression = BuildFilterExpression(
-                        filter.key,
-                        Operators.Equal,
-                        filter.value[0]
-                    );
-                    filterExpression.push(expression);
-                }
-            });
+    buildQueryString() {
+        const queryString = this.buildFilterQueryString();
+        const activePage = this.state.activePage + 1; // paging component is zero based but api is not
 
-            if (filterExpression.length) {
-                filterParts.push(
-                    `$filter=${filterExpression.join(` ${Operators.And} `)}`
-                );
-            }
-        }
-
-        return filterParts.join('&');
+        return queryString
+            ? `?page=${activePage}&${queryString}`
+            : `?page=${activePage}`;
     }
 
     componentDidMount() {
         this.getBlogEntries();
+    }
+
+    getActiveFilters() {
+        // filters are the distinct fields being returned, if there are some in the app, these should always be added to the query string
+        return this.state.filters.map(filter => filter.field);
+    }
+
+    getAppliedFilterList() {
+        const appliedFilters = { ...this.state.activeFilters };
+        return Object.keys(appliedFilters).map(appliedFilterKey => ({
+            key: appliedFilterKey,
+            value: appliedFilters[appliedFilterKey]
+        }));
+    }
+
+    getAppliedFiltersQuery() {
+        const appliedFilterList = this.getAppliedFilterList();
+
+        if (appliedFilterList.length) {
+            const filterExpressions = appliedFilterList.map(filter => {
+                const filterValue = filter.value[0];
+                if (filterValue && filterValue.toLowerCase() !== 'all') {
+                    return BuildFilterExpression(
+                        filter.key,
+                        Operators.Equal,
+                        filter.value[0]
+                    );
+                }
+                return null;
+            });
+            return `${filterExpressions.join(` ${Operators.And} `)}`;
+        }
+        return '';
     }
 
     getBlogEntries() {
@@ -154,9 +162,10 @@ class StructureContentList extends Component {
     }
 
     onPageChange(pageInfo) {
+        console.log(pageInfo);
         this.setState(
             {
-                activePage: pageInfo.selected + 1 // 0 based
+                activePage: pageInfo.selected
             },
             this.getBlogEntries
         );
