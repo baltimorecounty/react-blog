@@ -42,8 +42,8 @@ export default class FilterRadioList extends React.Component {
         return (
             <React.Fragment>
                 {options.map((option, index) => {
-					const { label, value, icon } = option;
-					const labelName = `${inputName}-${label}`;
+                    const { label, value, icon } = option;
+                    const labelName = `${inputName}-${label}`;
                     return (
                         <li key={index}>
                             <label htmlFor={labelName}>

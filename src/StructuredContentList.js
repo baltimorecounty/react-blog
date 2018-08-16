@@ -34,41 +34,52 @@ class StructureContentList extends Component {
     }
 
     buildQueryString() {
-		let queryString = this.buildFilterQueryString();
+        let queryString = this.buildFilterQueryString();
         return queryString
             ? `?page=${this.state.activePage}&${queryString}`
             : `?page=${this.state.activePage}`;
     }
 
     buildFilterQueryString() {
-		const { filters } = this.state;
-		const appliedFilters = {...this.state.activeFilters};
-		let filterParts = [];
+        const { filters } = this.state;
+        const appliedFilters = { ...this.state.activeFilters };
+        let filterParts = [];
 
-		// filters are the distinct fields being returned, if there are some in teh app, these should always be added to teh query string
-		const activeFilterList = filters.map(filter => filter.field).join(',');
-		if (activeFilterList) {
-			filterParts.push(`filters=${activeFilterList}`);
-		}
+        // filters are the distinct fields being returned, if there are some in teh app, these should always be added to teh query string
+        const activeFilterList = filters.map(filter => filter.field).join(',');
+        if (activeFilterList) {
+            filterParts.push(`filters=${activeFilterList}`);
+        }
 
-		const appliedFilterList = Object.keys(appliedFilters).map(appliedFilterKey => ({
-			key: appliedFilterKey,
-			value: appliedFilters[appliedFilterKey]
-		}));
+        const appliedFilterList = Object.keys(appliedFilters).map(
+            appliedFilterKey => ({
+                key: appliedFilterKey,
+                value: appliedFilters[appliedFilterKey]
+            })
+        );
 
-		if (appliedFilterList.length) {
-			let filterExpression = [];
-			appliedFilterList.forEach(filter => {
-				if (filter.value[0] && filter.value[0].toLowerCase() !== 'all') {
-					const expression = BuildFilterExpression(filter.key, Operators.Equal, filter.value[0]);
-					filterExpression.push(expression)
-				}
-			});
+        if (appliedFilterList.length) {
+            let filterExpression = [];
+            appliedFilterList.forEach(filter => {
+                if (
+                    filter.value[0] &&
+                    filter.value[0].toLowerCase() !== 'all'
+                ) {
+                    const expression = BuildFilterExpression(
+                        filter.key,
+                        Operators.Equal,
+                        filter.value[0]
+                    );
+                    filterExpression.push(expression);
+                }
+            });
 
-			if (filterExpression.length) {
-				filterParts.push(`$filter=${filterExpression.join(` ${Operators.And} `)}`)
-			}
-		}
+            if (filterExpression.length) {
+                filterParts.push(
+                    `$filter=${filterExpression.join(` ${Operators.And} `)}`
+                );
+            }
+        }
 
         return filterParts.join('&');
     }
@@ -113,34 +124,32 @@ class StructureContentList extends Component {
             filter.options = filterValues[filter.field];
             if (filter.type === 'radio') {
                 filter.options.unshift({
-					label: 'Show All',
-					value: 'all'
-				});
+                    label: 'Show All',
+                    value: 'all'
+                });
             }
             return filter;
         });
     }
 
     onChange(filter) {
-		const { field, values } = filter;
-		const newActiveFilters = {...this.state.activeFilters};
+        const { field, values } = filter;
+        const newActiveFilters = { ...this.state.activeFilters };
 
-		if (values.length) {
-			newActiveFilters[field] = values;
-		}
-		else {
-			delete newActiveFilters[field];
-		}
+        if (values.length) {
+            newActiveFilters[field] = values;
+        } else {
+            delete newActiveFilters[field];
+        }
 
         this.setState(
             {
                 activeFilters: newActiveFilters,
                 activePage: 0
-			},
-			() => {
-				this.getBlogEntries();
-			}
-
+            },
+            () => {
+                this.getBlogEntries();
+            }
         );
     }
 
@@ -154,10 +163,10 @@ class StructureContentList extends Component {
     }
 
     render() {
-		const { activePage } = this.state;
+        const { activePage } = this.state;
         const { cardContentComponent } = this.props;
         const { TotalPages, Results } = this.state.viewModel;
-		const defaultButtonClasses = 'btn btn-default';
+        const defaultButtonClasses = 'btn btn-default';
 
         return (
             <div className="Blog">
@@ -197,8 +206,8 @@ class StructureContentList extends Component {
                                 pageLinkClassName={defaultButtonClasses}
                                 previousLinkClassName={defaultButtonClasses}
                                 nextLinkClassName={defaultButtonClasses}
-								activeClassName={'active'}
-								forcePage={activePage}
+                                activeClassName={'active'}
+                                forcePage={activePage}
                             />
                         )}
                     </div>

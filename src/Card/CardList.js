@@ -13,7 +13,7 @@ const defaultProps = {
 
 export default class CardList extends React.Component {
     render() {
-		const { cardContentComponent: CardContentComponent } = this.props;
+        const { cardContentComponent: CardContentComponent } = this.props;
         return (
             <React.Fragment>
                 {this.props.contentItems.map(contentItem => {

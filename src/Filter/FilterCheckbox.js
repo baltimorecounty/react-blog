@@ -28,7 +28,7 @@ export default class FilterCheckbox extends React.Component {
     }
 
     render() {
-		const { label, value, icon, name } = this.props;
+        const { label, value, icon, name } = this.props;
 
         return (
             <label htmlFor={`checkbox-${name}-${value}`}>

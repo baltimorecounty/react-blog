@@ -1,67 +1,75 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* TODO: Move this to the Main Assets Project */
+
 .pager {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
+
 .pager li {
-	display: inline-block;
-	border: 1px solid lightgray;
+    display: inline-block;
+    border: 1px solid lightgray;
 }
+
 .pager li a {
-	display: block;
+    display: block;
 }
+
 .pager li button.active {
-	background: blue;
-	color: white;
+    background: blue;
+    color: white;
 }
 
 .btn.active,
 .btn.active:focus,
 .btn:focus,
 li.active .btn {
-	background: #00a19b;
-	color: white;
+    background: #00a19b;
+    color: white;
 }
 
 .btn:hover,
 .btn:hover:focus,
 li.active:hover {
-	background: #137875 !important;
-	color: white !important;
+    background: #137875 !important;
+    color: white !important;
 }
 
 li.disabled a {
-	cursor: not-allowed;
+    cursor: not-allowed;
     opacity: .65;
     filter: alpha(opacity=65);
     -webkit-box-shadow: none;
@@ -70,7 +78,6 @@ li.disabled a {
 
 /* Filter group with arrows */
 
-
 body {
-	margin: 20px;
+    margin: 20px;
 }

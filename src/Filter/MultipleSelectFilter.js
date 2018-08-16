@@ -43,7 +43,7 @@ export default class MultipleSelectFilter extends React.Component {
                             <FilterRadioButton
                                 onChange={onChange}
                                 options={options}
-								name={title}
+                                name={title}
                             />
                         )}
                     </ul>

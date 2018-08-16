@@ -20,19 +20,20 @@ export default class FilterContainer extends React.Component {
 
         return (
             <React.Fragment>
-                {filters && filters.length && (
-                    <div className="bc_filters filters">
-                        <h3 className="filters-title">{title}</h3>
-                        {filters.map((filter, index) => (
-                            <Filter
-                                onChange={onChange}
-                                key={index}
-                                filter={filter}
-                            />
-                        ))}{' '}
-                        {/* We should be able to pass in another component? */}
-                    </div>
-                )}
+                {filters &&
+                    filters.length && (
+                        <div className="bc_filters filters">
+                            <h3 className="filters-title">{title}</h3>
+                            {filters.map((filter, index) => (
+                                <Filter
+                                    onChange={onChange}
+                                    key={index}
+                                    filter={filter}
+                                />
+                            ))}{' '}
+                            {/* We should be able to pass in another component? */}
+                        </div>
+                    )}
             </React.Fragment>
         );
     }
