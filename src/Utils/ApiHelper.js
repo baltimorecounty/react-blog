@@ -11,7 +11,12 @@ const Operators = {
 	"Not": "not"
 };
 
-const BuildFilterExpression = (key, operator, value) => `${key} ${operator} '${value}'`;
+const BuildFilterExpression = (key, operator, value) => {
+	const valueExpression = typeof(value) === 'string'
+		? `'${value}'`
+		: value;
+	return `${key} ${operator} ${valueExpression}`;
+};
 
 export {
 	BuildFilterExpression,
