@@ -1,58 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FilterCheckbox from './FilterCheckbox';
+import FilterRadioButton from './FilterRadioButton';
 
 const propTypes = {
-	onChange: PropTypes.func,
-	options: PropTypes.array.isRequired,
-	title: PropTypes.string
+    onChange: PropTypes.func,
+    options: PropTypes.array.isRequired,
+    title: PropTypes.string.isRequired,
+    type: PropTypes.string
 };
 
 const defaultProps = {
-	title: "Filter"
+    type: 'radio'
 };
 
 export default class MultipleSelectFilter extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedFilters: []
-		};
+    constructor(props) {
+        super(props);
+        this.state = {
+            isExpanded: true
+        };
+    }
 
-		this.handleFilterClick = this.handleFilterClick.bind(this);
-	}
-
-	handleFilterClick(selectedFilter) {
-		const { isSelected, value } = selectedFilter;
-		const selectedFilters = isSelected
-			? [...this.state.selectedFilters, value]
-			: this.state.selectedFilters.filter(filter => filter !== value);
-
-		this.setState({
-			selectedFilters
-		}, () => {
-			this.props.onChange(this.props.title, this.state.selectedFilters);
-		});
-	}
-
-	render() {
-		const { options, title } = this.props;
-
-		return (
-			<ul className="filter-container">
-				<button>{title} <i className="fa fa-plus-square" aria-hidden="true"></i></button>
-				{options.map((option, index) =>
-					<li key={index}>
-						<FilterCheckbox
-							onClick={this.handleFilterClick}
-							label={option.label}
-							value={option.value} />
-					</li>)
-				}
-			</ul>
-		);
-	}
+    render() {
+        const { options, title, type, onChange } = this.props;
+        return (
+            <React.Fragment>
+                {options && (
+                    <ul className="filter-list">
+                        {options.map((option, index) => (
+                            <li key={index}>
+                                {type === 'multiple' && (
+                                    <FilterCheckbox
+                                        onClick={onChange}
+                                        label={option.label}
+                                        value={option.value}
+                                    />
+                                )}
+                            </li>
+                        ))}
+                        {type === 'radio' && (
+                            <FilterRadioButton
+                                onChange={onChange}
+                                options={options}
+                                name={title}
+                            />
+                        )}
+                    </ul>
+                )}
+            </React.Fragment>
+        );
+    }
 }
 
- MultipleSelectFilter.propTypes = propTypes;
- MultipleSelectFilter.defaultProps = defaultProps;
+MultipleSelectFilter.propTypes = propTypes;
+MultipleSelectFilter.defaultProps = defaultProps;

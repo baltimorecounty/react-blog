@@ -12,13 +12,13 @@ const defaultProps = {
     contentItems: []
 };
 
-export default class BlogCardList extends React.Component {
+export default class CardList extends React.Component {
     render() {
         return (
             <React.Fragment>
                 {this.props.contentItems.map(contentItem => {
                     return (
-                        <Card key={contentItem.Id} cardType="blog">
+                        <Card key={contentItem.Id} cardType={contentType}>
                             <BlogCardContent contentItem={contentItem} />
                         </Card>
                     );
@@ -28,5 +28,5 @@ export default class BlogCardList extends React.Component {
     }
 }
 
-BlogCardList.propTypes = propTypes;
-BlogCardList.defaultProps = defaultProps;
+CardList.propTypes = propTypes;
+CardList.defaultProps = defaultProps;

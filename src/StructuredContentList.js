@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import BlogCardList from './Blog/BlogCardList';
+import CardList from './Card/CardList';
 import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
 import { Loader } from 'baltimorecounty-react-components';
-import './App.css'
+import './App.css';
+import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
 
 class StructureContentList extends Component {
     constructor(props) {
@@ -11,140 +12,215 @@ class StructureContentList extends Component {
         this.state = {
             viewModel: {
                 Results: {
-                    Contents: [],
+                    Contents: []
                 }
-			},
-			activePage: 1,
-			categories: [
-				{
-					name: 'All Blog Posts',
-					icon: 'fa-list-ul'
-				},
-				{
-					name: 'Collection and Materials',
-					icon: 'fa-book'
-				},
-				{
-					name: 'News',
-					icon: 'fa-bullhorn'
-				},
-				{
-					name: 'Programming and Events',
-					icon: 'fa-calendar-check-o'
-				}
-		],
-			categoryFilter: null,
-			baseUrl: 'http://localhost:54453/api/structured-content/blog',
-			isLoading: true,
-			hasErrorGettingEntries: false,
-			filters: [{
-				title: "Category",
-				type: 'multiple-select',
-				options: [
-					{
-						label: "Collection and Materials",
-						value: "collections-and-materials"
-					},
-					{
-						label: "News",
-						value: "news"
-					},
-					{
-						label: "Programming and Events",
-						value: "programming-and-events"
-					}
-				]
-			}]
-		};
+            },
+            activePage: 0,
+            activeFilters: {},
+            baseUrl: this.props.baseUrl,
+            isLoading: true,
+            hasErrorGettingEntries: false,
+            filters: this.props.filters
+                ? this.props.filters.map(filter => {
+                      filter.options = []; // ensure options
+                      return filter;
+                  })
+                : []
+        };
 
-		this.onPageChange = this.onPageChange.bind(this);
-		this.onCategorySelection = this.onCategorySelection.bind(this);
-	}
+        this.onPageChange = this.onPageChange.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.getFilterOptions = this.getFilterOptions.bind(this);
+        this.getActiveFilters = this.getActiveFilters.bind(this);
+        this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
+    }
 
-	buildQueryString() {
-		const { categoryFilter } = this.state;
-		const filterQueryString = categoryFilter && categoryFilter.toLowerCase().indexOf('all ') === -1
-			? `&Category=${categoryFilter}`
-			: '';
+    buildFilterQueryString() {
+        const activeFilters = this.getActiveFilters();
+        const appliedFilterQuery = this.getAppliedFiltersQuery();
+        let queryParams = [];
 
-		return `?page=${this.state.activePage}${filterQueryString}`;
-	}
+        if (activeFilters) {
+            queryParams.push(`filters=${activeFilters}`);
+        }
+        if (appliedFilterQuery) {
+            queryParams.push(`$filter=${appliedFilterQuery}`);
+        }
 
-	componentDidMount() {
-		this.getBlogEntries(this.state.activePage);
-	}
+        return queryParams.join('&');
+    }
 
-	getBlogEntries() {
-		this.setState({
-			isLoading: !this.state.viewModel.Results.Contents.length
-		});
-		const requestUrl = this.getRequestUrl();
+    buildQueryString() {
+        const queryString = this.buildFilterQueryString();
+        const activePage = this.state.activePage + 1; // paging component is zero based but api is not
 
-		fetch(requestUrl)
-			.then((response) => response.json())
-			.then((blogViewModel) => {
-				this.setState({
-					viewModel: blogViewModel,
-					isLoading: false,
+        return queryString
+            ? `?page=${activePage}&${queryString}`
+            : `?page=${activePage}`;
+    }
 
-				})
-			})
-			.catch((error) => {
-				this.setState({
-					hasErrorGettingEntries: true,
-					isLoading: false
-				});
-			});
-	}
+    componentDidMount() {
+        this.getBlogEntries();
+    }
 
-	getRequestUrl() {
-		const queryString = this.buildQueryString();
+    getActiveFilters() {
+        // filters are the distinct fields being returned, if there are some in the app, these should always be added to the query string
+        return this.state.filters.map(filter => filter.field);
+    }
 
-		return `${this.state.baseUrl}${queryString}`
-	}
+    getAppliedFilterList() {
+        const appliedFilters = { ...this.state.activeFilters };
+        return Object.keys(appliedFilters).map(appliedFilterKey => ({
+            key: appliedFilterKey,
+            value: appliedFilters[appliedFilterKey]
+        }));
+    }
 
-	onCategorySelection(appliedFilterText) {
-		this.setState({
-			categoryFilter: appliedFilterText,
-			activePage: 1
-		}, this.getBlogEntries);
-	}
+    getAppliedFiltersQuery() {
+        const appliedFilterList = this.getAppliedFilterList();
 
-	onPageChange(pageInfo) {
-		this.setState({
-			activePage: pageInfo.selected + 1 // 0 based
-		}, this.getBlogEntries);
-	}
+        if (appliedFilterList.length) {
+            const filterExpressions = appliedFilterList.map(filter => {
+                const filterValue = filter.value[0];
+                if (filterValue && filterValue.toLowerCase() !== 'all') {
+                    return BuildFilterExpression(
+                        filter.key,
+                        Operators.Equal,
+                        filter.value[0]
+                    );
+                }
+                return null;
+            });
+            return `${filterExpressions.join(` ${Operators.And} `)}`;
+        }
+        return '';
+    }
+
+    getBlogEntries() {
+        this.setState({
+            isLoading: !this.state.viewModel.Results.Contents.length
+        });
+        const requestUrl = this.getRequestUrl();
+
+        fetch(requestUrl)
+            .then(response => response.json())
+            .then(contentViewModel => {
+                this.setState({
+                    viewModel: contentViewModel,
+                    isLoading: false,
+                    filters: this.getFilterOptions(
+                        contentViewModel.FilterValues
+                    )
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    hasErrorGettingEntries: true,
+                    isLoading: false
+                });
+            });
+    }
+
+    getRequestUrl() {
+        const queryString = this.buildQueryString();
+
+        return `${this.state.baseUrl}${queryString}`;
+    }
+
+    getFilterOptions(filterValues) {
+        return this.state.filters.map(filter => {
+            filter.options = filterValues[filter.field];
+            if (filter.type === 'radio') {
+                filter.options.unshift({
+                    label: 'Show All',
+                    value: 'all'
+                });
+            }
+            return filter;
+        });
+    }
+
+    onChange(filter) {
+        const { field, values } = filter;
+        const newActiveFilters = { ...this.state.activeFilters };
+
+        if (values.length) {
+            newActiveFilters[field] = values;
+        } else {
+            delete newActiveFilters[field];
+        }
+
+        this.setState(
+            {
+                activeFilters: newActiveFilters,
+                activePage: 0
+            },
+            () => {
+                this.getBlogEntries();
+            }
+        );
+    }
+
+    onPageChange(pageInfo) {
+        console.log(pageInfo);
+        this.setState(
+            {
+                activePage: pageInfo.selected
+            },
+            this.getBlogEntries
+        );
+    }
 
     render() {
-		const { TotalPages, Results } = this.state.viewModel;
-		const defaultButtonClasses = "btn btn-default";
+        const { activePage } = this.state;
+        const { cardContentComponent } = this.props;
+        const { TotalPages, Results } = this.state.viewModel;
+        const defaultButtonClasses = 'btn btn-default';
+
         return (
             <div className="Blog">
-				<FilterContainer
-					title="Blog Filters"
-					filters={this.state.filters} />
-                <BlogCardList
-                    contentItems={Results.Contents} />
-				{this.state.isLoading && <Loader /> }
-				{this.state.hasErrorGettingEntries &&
-					<p>There was a problem retrieving our Between the Covers posts. Please try again in a few minutes.</p>}
-				{TotalPages && <Pagination
-					previousLabel={"Previous"}
-					nextLabel={"Next"}
-					breakLabel={<a href="">...</a>}
-					breakClassName={"break-me"}
-					pageCount={TotalPages}
-					marginPagesDisplayed={2}
-					pageRangeDisplayed={5}
-					onPageChange={this.onPageChange}
-					containerClassName={"pager"}
-					subContainerClassName={"pages pagination"}
-					pageLinkClassName={defaultButtonClasses}
-					previousLinkClassName={defaultButtonClasses}
-					nextLinkClassName={defaultButtonClasses}
-					activeClassName={"active"} />
-				}
+                <div className="row">
+                    <div className="col-md-3">
+                        <FilterContainer
+                            title="Blog Filters"
+                            filters={this.state.filters}
+                            onChange={this.onChange}
+                        />
+                    </div>
+                    <div className="col-md-9">
+                        <CardList
+                            contentType="blog"
+                            contentItems={Results.Contents}
+                            cardContentComponent={cardContentComponent}
+                        />
+                        {this.state.isLoading && <Loader />}
+                        {this.state.hasErrorGettingEntries && (
+                            <p>
+                                There was a problem retrieving our Between the
+                                Covers posts. Please try again in a few minutes.
+                            </p>
+                        )}
+                        {TotalPages && (
+                            <Pagination
+                                previousLabel={'Previous'}
+                                nextLabel={'Next'}
+                                breakLabel={<a href="">...</a>}
+                                breakClassName={'break-me'}
+                                pageCount={TotalPages}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                onPageChange={this.onPageChange}
+                                containerClassName={'pager'}
+                                subContainerClassName={'pages pagination'}
+                                pageLinkClassName={defaultButtonClasses}
+                                previousLinkClassName={defaultButtonClasses}
+                                nextLinkClassName={defaultButtonClasses}
+                                activeClassName={'active'}
+                                forcePage={activePage}
+                            />
+                        )}
+                    </div>
+                </div>
             </div>
         );
     }

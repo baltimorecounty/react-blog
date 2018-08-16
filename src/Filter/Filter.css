@@ -1,0 +1,28 @@
+.bc_filters {
+    margin: 0 0 19.2px 0;
+    width: 100%;
+}
+
+.filter-toggle {
+    display: flex;
+    justify-content: space-between;
+}
+
+.filter-list-container {
+    padding: 8px;
+}
+
+.filter-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.filter-list li label {
+    padding: 2px 0;
+    margin-bottom: 4px;
+}
+
+.filter-list>li input {
+    margin-right: 8px;
+}
