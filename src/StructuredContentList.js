@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CardList from './Card/CardList';
-import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
+import LoadMore from './LoadMore/LoadMore';
 import { Card, Loader } from 'baltimorecounty-react-components';
 import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
@@ -24,11 +24,13 @@ class StructureContentList extends Component {
                     Contents: []
                 }
             },
-            activePage: 0,
+            blogEntries: [],
+            activePage: 1,
             activeFilters: {},
             baseUrl: this.props.baseUrl,
-            isInitialized: false,
             isLoading: true,
+            isLoadMoreDisabled: false,
+            shouldLoadMoreBeVisible: true,
             hasErrorGettingEntries: false,
             filters: this.props.filters
                 ? this.props.filters.map(filter => {
@@ -38,11 +40,11 @@ class StructureContentList extends Component {
                 : []
         };
 
-        this.onPageChange = this.onPageChange.bind(this);
         this.onChange = this.onChange.bind(this);
         this.getFilterOptions = this.getFilterOptions.bind(this);
         this.getActiveFilters = this.getActiveFilters.bind(this);
         this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
+        this.loadMore = this.loadMore.bind(this);
     }
 
     buildFilterQueryString() {
@@ -62,7 +64,7 @@ class StructureContentList extends Component {
 
     buildQueryString() {
         const queryString = this.buildFilterQueryString();
-        const activePage = this.state.activePage + 1; // paging component is zero based but api is not
+        const activePage = this.state.activePage;
 
         return queryString
             ? `?page=${activePage}&${queryString}`
@@ -70,9 +72,7 @@ class StructureContentList extends Component {
     }
 
     componentDidMount() {
-        this.getBlogEntries(() => {
-            this.setState({ isInitialized: true });
-        });
+        this.getBlogEntries();
     }
 
     getActiveFilters() {
@@ -110,33 +110,44 @@ class StructureContentList extends Component {
 
     getBlogEntries(callback) {
         this.setState({
-            isLoading: !this.state.viewModel.Results.Contents.length
-        });
-        const requestUrl = this.getRequestUrl();
+            isLoading: true
+        }, () => {
+			const requestUrl = this.getRequestUrl();
 
-        fetch(requestUrl)
-            .then(response => response.json())
-            .then(contentViewModel => {
-                this.setState(
-                    {
-                        viewModel: contentViewModel,
-                        isLoading: false,
-                        filters: this.getFilterOptions(
-                            contentViewModel.FilterValues
-                        )
-                    },
-                    callback
-                );
-            })
-            .catch(error => {
-                this.setState(
-                    {
-                        hasErrorGettingEntries: true,
-                        isLoading: false
-                    },
-                    callback
-                );
-            });
+			fetch(requestUrl)
+				.then(response => response.json())
+				.then(contentViewModel => {
+					const blogEntries = this.state.blogEntries
+						.slice()
+						.concat(contentViewModel.Results.Contents);
+					const shouldLoadMoreBeVisible = !(
+						contentViewModel.TotalRecords === blogEntries.length
+					);
+
+					this.setState(
+						{
+							isLoading: false,
+							viewModel: contentViewModel,
+							blogEntries,
+							filters: this.getFilterOptions(
+								contentViewModel.FilterValues
+							),
+							shouldLoadMoreBeVisible,
+
+						},
+						callback
+					);
+				})
+				.catch(error => {
+					this.setState(
+						{
+							hasErrorGettingEntries: true,
+							isLoading: false
+						},
+						callback
+					);
+				});
+		});
     }
 
     getRequestUrl() {
@@ -171,7 +182,8 @@ class StructureContentList extends Component {
         this.setState(
             {
                 activeFilters: newActiveFilters,
-                activePage: 0
+                activePage: 1,
+                blogEntries: []
             },
             () => {
                 this.getBlogEntries();
@@ -179,27 +191,33 @@ class StructureContentList extends Component {
         );
     }
 
-    onPageChange(pageInfo) {
-        console.log(pageInfo);
+    loadMore() {
         this.setState(
             {
-                activePage: pageInfo.selected
+                activePage: this.state.activePage + 1,
+                isLoadMoreDisabled: true
             },
-            this.getBlogEntries
+            () => {
+                this.getBlogEntries(() => {
+                    this.setState({
+                        isLoadMoreDisabled: false
+                    });
+                });
+            }
         );
     }
 
     render() {
         const {
-            activePage,
-            isLoading,
+            blogEntries,
             hasErrorGettingEntries,
-            isInitialized,
-            filters
+            isLoading,
+            isLoadMoreDisabled,
+            filters,
+            shouldLoadMoreBeVisible
         } = this.state;
         const { cardContentComponent, title } = this.props;
-        const { TotalPages, Results } = this.state.viewModel;
-        const defaultButtonClasses = 'btn btn-default';
+        const { TotalPages } = this.state.viewModel;
 
         return (
             <div className="Blog container">
@@ -213,14 +231,14 @@ class StructureContentList extends Component {
                     </div>
                     <div className="col-md-9">
                         {title && <h1>{title}</h1>}
-                        {!isLoading && (
+                        {(!isLoading || blogEntries.length) && (
                             <CardList
                                 contentType="blog"
-                                contentItems={Results.Contents}
+                                contentItems={blogEntries}
                                 cardContentComponent={cardContentComponent}
                             />
                         )}
-                        {!isInitialized && <Loader />}
+                        {isLoading && <Loader />}
                         {hasErrorGettingEntries && (
                             <Card>
                                 <p>
@@ -232,25 +250,13 @@ class StructureContentList extends Component {
                                 </p>
                             </Card>
                         )}
-                        {TotalPages && (
-                            <Pagination
-                                previousLabel={'Previous'}
-                                nextLabel={'Next'}
-                                breakLabel={<a href="">...</a>}
-                                breakClassName={'break-me'}
-                                pageCount={TotalPages}
-                                marginPagesDisplayed={5}
-                                pageRangeDisplayed={10}
-                                onPageChange={this.onPageChange}
-                                containerClassName={'pager'}
-                                subContainerClassName={'pages pagination'}
-                                pageLinkClassName={defaultButtonClasses}
-                                previousLinkClassName={defaultButtonClasses}
-                                nextLinkClassName={defaultButtonClasses}
-                                activeClassName={'active'}
-                                forcePage={activePage}
-                            />
-                        )}
+                        {TotalPages &&
+                            shouldLoadMoreBeVisible && (
+                                <LoadMore
+                                    disabled={isLoadMoreDisabled}
+                                    onSelect={this.loadMore}
+                                />
+                            )}
                     </div>
                 </div>
             </div>
