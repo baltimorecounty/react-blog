@@ -202,7 +202,7 @@ class StructureContentList extends Component {
         const defaultButtonClasses = 'btn btn-default';
 
         return (
-            <div className="Blog">
+            <div className="Blog container">
                 <div className="row">
                     <div className="col-md-3">
                         <FilterContainer
@@ -239,8 +239,8 @@ class StructureContentList extends Component {
                                 breakLabel={<a href="">...</a>}
                                 breakClassName={'break-me'}
                                 pageCount={TotalPages}
-                                marginPagesDisplayed={2}
-                                pageRangeDisplayed={5}
+                                marginPagesDisplayed={5}
+                                pageRangeDisplayed={10}
                                 onPageChange={this.onPageChange}
                                 containerClassName={'pager'}
                                 subContainerClassName={'pages pagination'}
