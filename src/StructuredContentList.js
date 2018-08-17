@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CardList from './Card/CardList';
 import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
 import { Card, Loader } from 'baltimorecounty-react-components';
 import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
+
+const propTypes = {
+    title: PropTypes.string
+};
+
+const defaultProps = {
+    title: ''
+};
 
 class StructureContentList extends Component {
     constructor(props) {
@@ -181,8 +190,14 @@ class StructureContentList extends Component {
     }
 
     render() {
-        const { activePage } = this.state;
-        const { cardContentComponent } = this.props;
+        const {
+            activePage,
+            isLoading,
+            hasErrorGettingEntries,
+            isInitialized,
+            filters
+        } = this.state;
+        const { cardContentComponent, title } = this.props;
         const { TotalPages, Results } = this.state.viewModel;
         const defaultButtonClasses = 'btn btn-default';
 
@@ -192,20 +207,21 @@ class StructureContentList extends Component {
                     <div className="col-md-3">
                         <FilterContainer
                             title="Blog Filters"
-                            filters={this.state.filters}
+                            filters={filters}
                             onChange={this.onChange}
                         />
                     </div>
                     <div className="col-md-9">
-                        {!this.state.isLoading && (
+                        {title && <h1>{title}</h1>}
+                        {!isLoading && (
                             <CardList
                                 contentType="blog"
                                 contentItems={Results.Contents}
                                 cardContentComponent={cardContentComponent}
                             />
                         )}
-                        {!this.state.isInitialized && <Loader />}
-                        {this.state.hasErrorGettingEntries && (
+                        {!isInitialized && <Loader />}
+                        {hasErrorGettingEntries && (
                             <Card>
                                 <p>
                                     <em>
@@ -243,3 +259,6 @@ class StructureContentList extends Component {
 }
 
 export default StructureContentList;
+
+StructureContentList.propTypes = propTypes;
+StructureContentList.defaultProps = defaultProps;
