@@ -19,8 +19,9 @@
 }
 
 .filter-list li label {
+	display: flex;
+	margin-bottom: 4px;
     padding: 2px 0;
-    margin-bottom: 4px;
 }
 
 .filter-list>li input {
