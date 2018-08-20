@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 
 const propTypes = {
     contentItem: PropTypes.object.isRequired
@@ -49,7 +50,7 @@ export default class BlogCardContent extends React.Component {
                         <a href={Link}>{Title}</a>
                     </h2>
                     <div className="card-content-date">
-                        {PublishedDate} | <span>By {Author}</span>
+                        {format(PublishedDate, 'MMMM D, YYYY')} | <span>By {Author}</span>
                     </div>
                     <div className="card-content-summary SEPost_Short_Description">
                         {ShortDescription}
