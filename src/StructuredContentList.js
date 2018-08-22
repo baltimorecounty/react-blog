@@ -6,6 +6,7 @@ import LoadMore from './LoadMore/LoadMore';
 import { Card, Loader } from 'baltimorecounty-react-components';
 import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
+import BlogCardSkeleton from './Blog/BlogCardSkeleton';
 
 const propTypes = {
     title: PropTypes.string
@@ -29,6 +30,7 @@ class StructureContentList extends Component {
             activeFilters: {},
             baseUrl: this.props.baseUrl,
             isLoading: true,
+            isInitialized: false,
             isLoadMoreDisabled: false,
             shouldLoadMoreBeVisible: true,
             hasErrorGettingEntries: false,
@@ -44,7 +46,7 @@ class StructureContentList extends Component {
         this.getFilterOptions = this.getFilterOptions.bind(this);
         this.getActiveFilters = this.getActiveFilters.bind(this);
         this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
-        this.loadMore = this.loadMore.bind(this);
+        this.onLoadMore = this.onLoadMore.bind(this);
     }
 
     buildFilterQueryString() {
@@ -109,51 +111,53 @@ class StructureContentList extends Component {
     }
 
     getBlogEntries(callback) {
-        this.setState({
-            isLoading: true
-        }, () => {
-			const requestUrl = this.getRequestUrl();
+        this.setState(
+            {
+                isLoading: true
+            },
+            () => {
+                const requestUrl = this.getRequestUrl();
 
-			fetch(requestUrl)
-				.then(response => response.json())
-				.then(contentViewModel => {
-					const blogEntries = this.state.blogEntries
-						.slice()
-						.concat(contentViewModel.Results.Contents);
-					const shouldLoadMoreBeVisible = !(
-						contentViewModel.TotalRecords === blogEntries.length
-					);
+                fetch(requestUrl)
+                    .then(response => response.json())
+                    .then(contentViewModel => {
+                        const blogEntries = this.state.blogEntries
+                            .slice()
+                            .concat(contentViewModel.Results.Contents);
+                        const shouldLoadMoreBeVisible = !(
+                            contentViewModel.TotalRecords === blogEntries.length
+                        );
 
-					this.setState(
-						{
-							isLoading: false,
-							viewModel: contentViewModel,
-							blogEntries,
-							filters: this.getFilterOptions(
-								contentViewModel.FilterValues
-							),
-							shouldLoadMoreBeVisible,
-
-						},
-						callback
-					);
-				})
-				.catch(error => {
-					this.setState(
-						{
-							hasErrorGettingEntries: true,
-							isLoading: false
-						},
-						callback
-					);
-				});
-		});
+                        this.setState(
+                            {
+                                isLoading: false,
+                                viewModel: contentViewModel,
+                                blogEntries,
+                                filters: this.getFilterOptions(
+                                    contentViewModel.FilterValues
+                                ),
+                                shouldLoadMoreBeVisible
+                            },
+                            callback
+                        );
+                    })
+                    .catch(error => {
+                        this.setState(
+                            {
+                                hasErrorGettingEntries: true,
+                                isLoading: false
+                            },
+                            callback
+                        );
+                    });
+            }
+        );
     }
 
     getRequestUrl() {
         const queryString = this.buildQueryString();
 
-        return `${this.state.baseUrl}${queryString}`;
+        return `${this.state.baseUrl}${queryString}&shouldSkipCache=true`;
     }
 
     getFilterOptions(filterValues) {
@@ -191,7 +195,7 @@ class StructureContentList extends Component {
         );
     }
 
-    loadMore() {
+    onLoadMore() {
         this.setState(
             {
                 activePage: this.state.activePage + 1,
@@ -229,9 +233,14 @@ class StructureContentList extends Component {
                             onChange={this.onChange}
                         />
                     </div>
-                    <div className="col-md-9">
+                    <div className="col-md-9" style={{ position: 'relative' }}>
                         {title && <h1>{title}</h1>}
-                        {(!isLoading || blogEntries.length) && (
+                        {isLoading &&
+                            !isLoadMoreDisabled &&
+                            new Array(10)
+                                .fill()
+                                .map(item => <BlogCardSkeleton />)}
+                        {(!isLoading || blogEntries.length > 0) && (
                             <CardList
                                 contentType="blog"
                                 contentItems={blogEntries}
@@ -251,10 +260,11 @@ class StructureContentList extends Component {
                             </Card>
                         )}
                         {TotalPages &&
+                            !isLoading &&
                             shouldLoadMoreBeVisible && (
                                 <LoadMore
                                     disabled={isLoadMoreDisabled}
-                                    onSelect={this.loadMore}
+                                    onSelect={this.onLoadMore}
                                 />
                             )}
                     </div>
