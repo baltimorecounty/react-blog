@@ -28,15 +28,13 @@ export default class MultipleSelectFilter extends React.Component {
             <React.Fragment>
                 {options && (
                     <ul className="filter-list">
-                        {options.map((option, index) => (
+                        {type === 'multiple' && options.map((option, index) => (
                             <li key={index}>
-                                {type === 'multiple' && (
-                                    <FilterCheckbox
-                                        onClick={onChange}
-                                        label={option.label}
-                                        value={option.value}
-                                    />
-                                )}
+								<FilterCheckbox
+									onClick={onChange}
+									label={option.label}
+									value={option.value}
+								/>
                             </li>
                         ))}
                         {type === 'radio' && (
