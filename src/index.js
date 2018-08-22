@@ -10,11 +10,15 @@ const filters = [
     }
 ];
 
-ReactDOM.render(
-    <StructureContentList
-        baseUrl="//testservices.bcpl.info/api/structured-content/blog"
-        filters={filters}
-        cardContentComponent={BlogCardContent}
-    />,
-    document.getElementById('root')
-);
+const appElm = document.getElementById('root');
+
+if (appElm) {
+    ReactDOM.render(
+        <StructureContentList
+            baseUrl="//testservices.bcpl.info/api/structured-content/blog"
+            filters={filters}
+            cardContentComponent={BlogCardContent}
+        />,
+        appElm
+    );
+}
