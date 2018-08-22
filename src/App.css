@@ -46,7 +46,6 @@ li.disabled a {
 	text-align: center;
 }
 
-.skeleton *,
-.react-loading-skeleton {
+.skeleton * {
     height: 100%;
 }
