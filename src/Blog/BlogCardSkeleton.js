@@ -8,7 +8,7 @@ export default class CardSkeleton extends React.Component {
         return (
             <React.Fragment>
                 <Card>
-                    <div className="blog-skeleton">
+                    <div className="skeleton blog-skeleton">
                         <div className="blog-skeleton-image">
                             <Skeleton />
                         </div>
