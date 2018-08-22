@@ -7,6 +7,7 @@ import { Card, Loader } from 'baltimorecounty-react-components';
 import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
 import BlogCardSkeleton from './Blog/BlogCardSkeleton';
+import FilterSkeleton from './FilterContainer/FilterSkeleton';
 
 const propTypes = {
     title: PropTypes.string
@@ -227,11 +228,14 @@ class StructureContentList extends Component {
             <div className="Blog container">
                 <div className="row">
                     <div className="col-md-3">
-                        <FilterContainer
-                            title="Blog Filters"
-                            filters={filters}
-                            onChange={this.onChange}
-                        />
+                        {isLoading && <FilterSkeleton />}
+                        {!isLoading && (
+                            <FilterContainer
+                                title="Blog Filters"
+                                filters={filters}
+                                onChange={this.onChange}
+                            />
+                        )}
                     </div>
                     <div className="col-md-9" style={{ position: 'relative' }}>
                         {title && <h1>{title}</h1>}
