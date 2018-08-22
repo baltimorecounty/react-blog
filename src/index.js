@@ -15,7 +15,7 @@ const appElm = document.getElementById('root');
 if (appElm) {
     ReactDOM.render(
         <StructureContentList
-            baseUrl="//localhost:54453/api/structured-content/blog"
+            baseUrl="//testservices.bcpl.info/api/structured-content/blog"
             filters={filters}
             cardContentComponent={BlogCardContent}
         />,
