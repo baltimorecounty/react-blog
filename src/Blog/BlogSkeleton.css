@@ -1,0 +1,45 @@
+.blog-skeleton {
+    display: flex;
+    justify-content: space-between;
+}
+
+.blog-skeleton * {
+    height: 100%;
+}
+
+.blog-skeleton-image {
+    width: 102px;
+    height: 152px;
+    margin-left: 10px;
+}
+.blog-skeleton-content {
+	width: 60%;
+}
+
+.blog-skeleton-icon-container {
+	width: 20%;
+	text-align: center;
+}
+
+.blog-skeleton-icon {
+	height: 80px;
+	margin-top: 20px;
+}
+
+.blog-skeleton-icon-caption {
+	margin-top: 7.5px;
+}
+
+@media screen and (max-width: 768px) {
+	.blog-skeleton {
+		justify-content: flex-start;
+	}
+
+	.blog-skeleton-image {
+		margin-right: 30px;
+	}
+
+	.blog-skeleton-icon-container {
+		display: none;
+	}
+}
