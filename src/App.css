@@ -45,3 +45,8 @@ li.disabled a {
 .bc_loader {
 	text-align: center;
 }
+
+.skeleton *,
+.react-loading-skeleton {
+    height: 100%;
+}
