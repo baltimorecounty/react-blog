@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CardList from './Card/CardList';
-import Pagination from 'react-paginate';
 import FilterContainer from './FilterContainer/FilterContainer';
-import { Loader } from 'baltimorecounty-react-components';
+import LoadMore from './LoadMore/LoadMore';
+import { Card, Loader } from 'baltimorecounty-react-components';
 import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
+import BlogCardSkeleton from './Blog/BlogCardSkeleton';
+
+const propTypes = {
+    title: PropTypes.string
+};
+
+const defaultProps = {
+    title: ''
+};
 
 class StructureContentList extends Component {
     constructor(props) {
@@ -15,10 +25,14 @@ class StructureContentList extends Component {
                     Contents: []
                 }
             },
-            activePage: 0,
+            blogEntries: [],
+            activePage: 1,
             activeFilters: {},
             baseUrl: this.props.baseUrl,
             isLoading: true,
+            isInitialized: false,
+            isLoadMoreDisabled: false,
+            shouldLoadMoreBeVisible: true,
             hasErrorGettingEntries: false,
             filters: this.props.filters
                 ? this.props.filters.map(filter => {
@@ -28,11 +42,11 @@ class StructureContentList extends Component {
                 : []
         };
 
-        this.onPageChange = this.onPageChange.bind(this);
         this.onChange = this.onChange.bind(this);
         this.getFilterOptions = this.getFilterOptions.bind(this);
         this.getActiveFilters = this.getActiveFilters.bind(this);
         this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
+        this.onLoadMore = this.onLoadMore.bind(this);
     }
 
     buildFilterQueryString() {
@@ -52,7 +66,7 @@ class StructureContentList extends Component {
 
     buildQueryString() {
         const queryString = this.buildFilterQueryString();
-        const activePage = this.state.activePage + 1; // paging component is zero based but api is not
+        const activePage = this.state.activePage;
 
         return queryString
             ? `?page=${activePage}&${queryString}`
@@ -96,35 +110,54 @@ class StructureContentList extends Component {
         return '';
     }
 
-    getBlogEntries() {
-        this.setState({
-            isLoading: !this.state.viewModel.Results.Contents.length
-        });
-        const requestUrl = this.getRequestUrl();
+    getBlogEntries(callback) {
+        this.setState(
+            {
+                isLoading: true
+            },
+            () => {
+                const requestUrl = this.getRequestUrl();
 
-        fetch(requestUrl)
-            .then(response => response.json())
-            .then(contentViewModel => {
-                this.setState({
-                    viewModel: contentViewModel,
-                    isLoading: false,
-                    filters: this.getFilterOptions(
-                        contentViewModel.FilterValues
-                    )
-                });
-            })
-            .catch(error => {
-                this.setState({
-                    hasErrorGettingEntries: true,
-                    isLoading: false
-                });
-            });
+                fetch(requestUrl)
+                    .then(response => response.json())
+                    .then(contentViewModel => {
+                        const blogEntries = this.state.blogEntries
+                            .slice()
+                            .concat(contentViewModel.Results.Contents);
+                        const shouldLoadMoreBeVisible = !(
+                            contentViewModel.TotalRecords === blogEntries.length
+                        );
+
+                        this.setState(
+                            {
+                                isLoading: false,
+                                viewModel: contentViewModel,
+                                blogEntries,
+                                filters: this.getFilterOptions(
+                                    contentViewModel.FilterValues
+                                ),
+                                shouldLoadMoreBeVisible
+                            },
+                            callback
+                        );
+                    })
+                    .catch(error => {
+                        this.setState(
+                            {
+                                hasErrorGettingEntries: true,
+                                isLoading: false
+                            },
+                            callback
+                        );
+                    });
+            }
+        );
     }
 
     getRequestUrl() {
         const queryString = this.buildQueryString();
 
-        return `${this.state.baseUrl}${queryString}`;
+        return `${this.state.baseUrl}${queryString}&shouldSkipCache=true`;
     }
 
     getFilterOptions(filterValues) {
@@ -153,7 +186,8 @@ class StructureContentList extends Component {
         this.setState(
             {
                 activeFilters: newActiveFilters,
-                activePage: 0
+                activePage: 1,
+                blogEntries: []
             },
             () => {
                 this.getBlogEntries();
@@ -161,64 +195,78 @@ class StructureContentList extends Component {
         );
     }
 
-    onPageChange(pageInfo) {
-        console.log(pageInfo);
+    onLoadMore() {
         this.setState(
             {
-                activePage: pageInfo.selected
+                activePage: this.state.activePage + 1,
+                isLoadMoreDisabled: true
             },
-            this.getBlogEntries
+            () => {
+                this.getBlogEntries(() => {
+                    this.setState({
+                        isLoadMoreDisabled: false
+                    });
+                });
+            }
         );
     }
 
     render() {
-        const { activePage } = this.state;
-        const { cardContentComponent } = this.props;
-        const { TotalPages, Results } = this.state.viewModel;
-        const defaultButtonClasses = 'btn btn-default';
+        const {
+            blogEntries,
+            hasErrorGettingEntries,
+            isLoading,
+            isLoadMoreDisabled,
+            filters,
+            shouldLoadMoreBeVisible
+        } = this.state;
+        const { cardContentComponent, title } = this.props;
+        const { TotalPages } = this.state.viewModel;
 
         return (
-            <div className="Blog">
+            <div className="Blog container">
                 <div className="row">
                     <div className="col-md-3">
                         <FilterContainer
                             title="Blog Filters"
-                            filters={this.state.filters}
+                            filters={filters}
                             onChange={this.onChange}
                         />
                     </div>
-                    <div className="col-md-9">
-                        <CardList
-                            contentType="blog"
-                            contentItems={Results.Contents}
-                            cardContentComponent={cardContentComponent}
-                        />
-                        {this.state.isLoading && <Loader />}
-                        {this.state.hasErrorGettingEntries && (
-                            <p>
-                                There was a problem retrieving our Between the
-                                Covers posts. Please try again in a few minutes.
-                            </p>
-                        )}
-                        {TotalPages && (
-                            <Pagination
-                                previousLabel={'Previous'}
-                                nextLabel={'Next'}
-                                breakLabel={<a href="">...</a>}
-                                breakClassName={'break-me'}
-                                pageCount={TotalPages}
-                                marginPagesDisplayed={2}
-                                pageRangeDisplayed={5}
-                                onPageChange={this.onPageChange}
-                                containerClassName={'pager'}
-                                subContainerClassName={'pages pagination'}
-                                pageLinkClassName={defaultButtonClasses}
-                                previousLinkClassName={defaultButtonClasses}
-                                nextLinkClassName={defaultButtonClasses}
-                                activeClassName={'active'}
-                                forcePage={activePage}
+                    <div className="col-md-9" style={{ position: 'relative' }}>
+                        {title && <h1>{title}</h1>}
+                        {isLoading &&
+                            !isLoadMoreDisabled &&
+                            new Array(10)
+                                .fill()
+                                .map(item => <BlogCardSkeleton />)}
+                        {(!isLoading || blogEntries.length > 0) && (
+                            <CardList
+                                contentType="blog"
+                                contentItems={blogEntries}
+                                cardContentComponent={cardContentComponent}
                             />
                         )}
+                        {isLoading && <Loader />}
+                        {hasErrorGettingEntries && (
+                            <Card>
+                                <p>
+                                    <em>
+                                        There was a problem retrieving our
+                                        Between the Covers posts. Please try
+                                        again in a few minutes.
+                                    </em>
+                                </p>
+                            </Card>
+                        )}
+                        {TotalPages &&
+                            !isLoading &&
+                            shouldLoadMoreBeVisible && (
+                                <LoadMore
+                                    disabled={isLoadMoreDisabled}
+                                    onSelect={this.onLoadMore}
+                                />
+                            )}
                     </div>
                 </div>
             </div>
@@ -227,3 +275,6 @@ class StructureContentList extends Component {
 }
 
 export default StructureContentList;
+
+StructureContentList.propTypes = propTypes;
+StructureContentList.defaultProps = defaultProps;

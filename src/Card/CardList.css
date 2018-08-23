@@ -1,0 +1,26 @@
+.list-fade-enter {
+    opacity: 0.01;
+}
+
+.list-fade-enter.list-fade-enter-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in;
+}
+
+.list-fade-leave {
+    opacity: 1;
+}
+
+.list-fade-leave.list-fade-leave-active {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.list-fade-appear {
+    opacity: 0.01;
+}
+
+.list-fade-appear.list-fade-appear-active {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
