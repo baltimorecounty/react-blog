@@ -36,14 +36,15 @@ li.active:hover {
 
 li.disabled a {
     cursor: not-allowed;
-    opacity: .65;
+    opacity: 0.65;
     filter: alpha(opacity=65);
     -webkit-box-shadow: none;
     box-shadow: none;
 }
 
-.btn__load-more {
+.bc_loader {
     margin: 15px auto;
+    text-align: center;
 }
 
 .skeleton * {
