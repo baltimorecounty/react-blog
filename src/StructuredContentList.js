@@ -162,7 +162,7 @@ class StructureContentList extends Component {
     getRequestUrl() {
         const queryString = this.buildQueryString();
 
-        return `${this.state.baseUrl}${queryString}&shouldSkipCache=true`;
+        return `${this.state.baseUrl}${queryString}`;
     }
 
     getFilterOptions(filterValues) {
