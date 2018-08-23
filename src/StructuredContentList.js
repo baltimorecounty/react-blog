@@ -228,8 +228,10 @@ class StructureContentList extends Component {
             viewModel
         } = this.state;
         const { cardContentComponent, title } = this.props;
-        const shouldShowFilterSkeleton = isLoading && !isInitialized;
-        const shouldShowFilters = !isLoading || isInitialized;
+        const shouldShowFilterSkeleton =
+            (isLoading && !isInitialized) || blogEntries.length === 0;
+        const shouldShowFilters =
+            (!isLoading || isInitialized) && blogEntries.length > 0;
         const shouldShowCardSkeleton = isLoading && !isLoadMoreDisabled;
         const shouldShowCardList = !isLoading || blogEntries.length > 0;
         const shouldShowLoadMore =
