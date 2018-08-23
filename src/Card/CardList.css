@@ -1,26 +1,38 @@
 .list-fade-enter {
+    zoom: 1;
+    filter: alpha(opacity=10);
     opacity: 0.01;
 }
 
 .list-fade-enter.list-fade-enter-active {
+    zoom: 1;
+    filter: alpha(opacity=100);
     opacity: 1;
     transition: opacity 250ms ease-in;
 }
 
 .list-fade-leave {
+    zoom: 1;
+    filter: alpha(opacity=100);
     opacity: 1;
 }
 
 .list-fade-leave.list-fade-leave-active {
+    zoom: 1;
+    filter: alpha(opacity=10);
     opacity: 0.01;
-    transition: opacity .5s ease-in;
+    transition: opacity 0.5s ease-in;
 }
 
 .list-fade-appear {
+    zoom: 1;
+    filter: alpha(opacity=10);
     opacity: 0.01;
 }
 
 .list-fade-appear.list-fade-appear-active {
+    zoom: 1;
+    filter: alpha(opacity=100);
     opacity: 1;
-    transition: opacity .5s ease-in;
+    transition: opacity 0.5s ease-in;
 }
