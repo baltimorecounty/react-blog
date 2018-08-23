@@ -19,6 +19,7 @@
 }
 
 .filter-list li label {
+    align-items: baseline;
     display: flex;
     margin-bottom: 4px;
     padding: 2px 0;
