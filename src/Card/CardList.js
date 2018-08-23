@@ -15,29 +15,24 @@ const defaultProps = {
 
 export default class CardList extends React.Component {
     render() {
-		const { cardContentComponent: CardContentComponent } = this.props;
-		const cards = this.props.contentItems.map(contentItem => {
-			return (
-				<Card
-					key={contentItem.Id}
-					cardType={this.props.contentType}
-				>
-					<CardContentComponent
-						contentItem={contentItem}
-					/>
-				</Card>
-			);
-		});
-		const animationDelay = 250;
+        const { cardContentComponent: CardContentComponent } = this.props;
+        const cards = this.props.contentItems.map(contentItem => {
+            return (
+                <Card key={contentItem.Id} cardType={this.props.contentType}>
+                    <CardContentComponent contentItem={contentItem} />
+                </Card>
+            );
+        });
+        const animationDelay = 250;
 
         return (
             <React.Fragment>
                 <CSSTransitionGroup
                     transitionName="list-fade"
                     transitionEnterTimeout={animationDelay}
-					transitionLeaveTimeout={animationDelay}
-					transitionAppear={true}
-					transitionAppearTimeout={animationDelay}
+                    transitionLeaveTimeout={animationDelay}
+                    transitionAppear={true}
+                    transitionAppearTimeout={animationDelay}
                 >
                     {cards}
                 </CSSTransitionGroup>

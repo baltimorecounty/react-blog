@@ -19,8 +19,8 @@
 }
 
 .filter-list li label {
-	display: flex;
-	margin-bottom: 4px;
+    display: flex;
+    margin-bottom: 4px;
     padding: 2px 0;
 }
 
