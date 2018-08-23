@@ -10,7 +10,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-    contentItems: []
+    contentItems: [],
+    contentType: 'default'
 };
 
 export default class CardList extends React.Component {
