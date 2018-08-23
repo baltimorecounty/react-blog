@@ -75,7 +75,11 @@ class StructureContentList extends Component {
     }
 
     componentDidMount() {
-        this.getBlogEntries();
+        this.getBlogEntries(() => {
+            this.setState({
+                isInitialized: true
+            });
+        });
     }
 
     getActiveFilters() {
@@ -216,20 +220,27 @@ class StructureContentList extends Component {
         const {
             blogEntries,
             hasErrorGettingEntries,
+            isInitialized,
             isLoading,
             isLoadMoreDisabled,
             filters,
-            shouldLoadMoreBeVisible
+            shouldLoadMoreBeVisible,
+            viewModel
         } = this.state;
         const { cardContentComponent, title } = this.props;
-        const { TotalPages } = this.state.viewModel;
+        const shouldShowFilterSkeleton = isLoading && !isInitialized;
+        const shouldShowFilters = !isLoading || isInitialized;
+        const shouldShowCardSkeleton = isLoading && !isLoadMoreDisabled;
+        const shouldShowCardList = !isLoading || blogEntries.length > 0;
+        const shouldShowLoadMore =
+            viewModel.TotalPages && !isLoading && shouldLoadMoreBeVisible;
 
         return (
             <div className="Blog container">
                 <div className="row">
                     <div className="col-md-3">
-                        {isLoading && <FilterSkeleton />}
-                        {!isLoading && (
+                        {shouldShowFilterSkeleton && <FilterSkeleton />}
+                        {shouldShowFilters && (
                             <FilterContainer
                                 title="Blog Filters"
                                 filters={filters}
@@ -239,12 +250,11 @@ class StructureContentList extends Component {
                     </div>
                     <div className="col-md-9" style={{ position: 'relative' }}>
                         {title && <h1>{title}</h1>}
-                        {isLoading &&
-                            !isLoadMoreDisabled &&
+                        {shouldShowCardSkeleton &&
                             new Array(10)
                                 .fill()
                                 .map(item => <BlogCardSkeleton />)}
-                        {(!isLoading || blogEntries.length > 0) && (
+                        {shouldShowCardList && (
                             <CardList
                                 contentType="blog"
                                 contentItems={blogEntries}
@@ -263,14 +273,12 @@ class StructureContentList extends Component {
                                 </p>
                             </Card>
                         )}
-                        {TotalPages &&
-                            !isLoading &&
-                            shouldLoadMoreBeVisible && (
-                                <LoadMore
-                                    disabled={isLoadMoreDisabled}
-                                    onSelect={this.onLoadMore}
-                                />
-                            )}
+                        {shouldShowLoadMore && (
+                            <LoadMore
+                                disabled={isLoadMoreDisabled}
+                                onSelect={this.onLoadMore}
+                            />
+                        )}
                     </div>
                 </div>
             </div>
