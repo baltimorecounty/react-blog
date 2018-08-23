@@ -18,6 +18,7 @@ if (appElm) {
             baseUrl="//testservices.bcpl.info/api/structured-content/blog"
             filters={filters}
             cardContentComponent={BlogCardContent}
+            title="Between the Covers"
         />,
         appElm
     );

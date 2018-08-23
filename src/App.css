@@ -45,3 +45,7 @@ li.disabled a {
 .bc_loader {
 	text-align: center;
 }
+
+.skeleton * {
+    height: 100%;
+}
