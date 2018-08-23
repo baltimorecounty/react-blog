@@ -16,24 +16,25 @@ const defaultProps = {
 
 export default class FilterContainer extends React.Component {
     render() {
-        const { title, filters, onChange } = this.props;
+        const { title, filters, onChange, type } = this.props;
+        const shouldShowFilterContainer = filters && filters.length > 0;
 
         return (
             <React.Fragment>
-                {filters &&
-                    filters.length && (
-                        <div className="bc_filters filters">
-                            <h3 className="filters-title">{title}</h3>
-                            {filters.map((filter, index) => (
-                                <Filter
-                                    onChange={onChange}
-                                    key={index}
-                                    filter={filter}
-                                />
-                            ))}{' '}
-                            {/* We should be able to pass in another component? */}
-                        </div>
-                    )}
+                {shouldShowFilterContainer && (
+                    <div className="bc_filters filters">
+                        <h3 className="filters-title">{title}</h3>
+                        {filters.map((filter, index) => (
+                            <Filter
+                                onChange={onChange}
+                                key={index}
+                                filter={filter}
+                                type={type}
+                            />
+                        ))}{' '}
+                        {/* We should be able to pass in another component? */}
+                    </div>
+                )}
             </React.Fragment>
         );
     }
