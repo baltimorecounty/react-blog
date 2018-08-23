@@ -43,9 +43,8 @@ export default class FilterList extends React.Component {
 
         const filters = filterList.map((item, itemIndex) => {
             return (
-                <h4>
+                <h4 key={itemIndex}>
                     <Button
-                        key={itemIndex}
                         onClick={this.onButtonClick}
                         active={this.isActive(item)}
                     >
