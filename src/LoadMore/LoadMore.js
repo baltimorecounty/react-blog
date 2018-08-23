@@ -24,7 +24,7 @@ export default class LoadMore extends React.Component {
     }
 
     render() {
-        const defaultButtonClasses = 'btn btn-primary';
+        const defaultButtonClasses = 'btn btn-primary btn__load-more';
         const { buttonText, disabled } = this.props;
         return (
             <React.Fragment>

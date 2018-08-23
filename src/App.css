@@ -10,8 +10,8 @@
 }
 
 .pager li a {
-	display: block;
-	margin-bottom: 0;
+    display: block;
+    margin-bottom: 0;
 }
 
 .pager li button.active {
@@ -42,8 +42,8 @@ li.disabled a {
     box-shadow: none;
 }
 
-.bc_loader {
-	text-align: center;
+.btn__load-more {
+    margin: 15px auto;
 }
 
 .skeleton * {
