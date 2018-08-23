@@ -38,8 +38,10 @@ export default class Filter extends React.Component {
     }
 
     toggleFilter() {
-        this.setState({
-            isExpanded: !this.state.isExpanded
+        this.setState(prevState => {
+            return {
+                isExpanded: !prevState.isExpanded
+            };
         });
     }
 
