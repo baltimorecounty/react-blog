@@ -229,9 +229,9 @@ class StructureContentList extends Component {
         } = this.state;
         const { cardContentComponent, title } = this.props;
         const shouldShowFilterSkeleton =
-            (isLoading && !isInitialized) || blogEntries.length === 0;
+            (isLoading && !isInitialized) || hasErrorGettingEntries;
         const shouldShowFilters =
-            (!isLoading || isInitialized) && blogEntries.length > 0;
+            (!isLoading || isInitialized) && !hasErrorGettingEntries;
         const shouldShowCardSkeleton = isLoading && !isLoadMoreDisabled;
         const shouldShowCardList = !isLoading || blogEntries.length > 0;
         const shouldShowLoadMore =
@@ -255,7 +255,9 @@ class StructureContentList extends Component {
                         {shouldShowCardSkeleton &&
                             new Array(10)
                                 .fill()
-                                .map(item => <BlogCardSkeleton />)}
+                                .map((item, itemIndex) => (
+                                    <BlogCardSkeleton key={itemIndex} />
+                                ))}
                         {shouldShowCardList && (
                             <CardList
                                 contentType="blog"
