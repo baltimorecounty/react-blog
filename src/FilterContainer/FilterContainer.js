@@ -22,7 +22,7 @@ export default class FilterContainer extends React.Component {
         return (
             <React.Fragment>
                 {shouldShowFilterContainer && (
-                    <div className="bc_filters filters">
+                    <div className="bc_filters">
                         <h3 className="filters-title">{title}</h3>
                         {filters.map((filter, index) => (
                             <Filter
