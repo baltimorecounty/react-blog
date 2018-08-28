@@ -238,52 +238,53 @@ class StructureContentList extends Component {
             viewModel.TotalPages && !isLoading && shouldLoadMoreBeVisible;
 
         return (
-            <div className="Blog container">
-                <div className="row">
-                    <div className="col-md-3">
-                        {shouldShowFilterSkeleton && <FilterSkeleton />}
-                        {shouldShowFilters && (
-                            <FilterContainer
-                                title="Blog Filters"
-                                filters={filters}
-                                onChange={this.onChange}
-                            />
-                        )}
-                    </div>
-                    <div className="col-md-9" style={{ position: 'relative' }}>
-                        {title && <h1>{title}</h1>}
-                        {shouldShowCardSkeleton &&
-                            new Array(10)
-                                .fill()
-                                .map((item, itemIndex) => (
-                                    <BlogCardSkeleton key={itemIndex} />
-                                ))}
-                        {shouldShowCardList && (
-                            <CardList
-                                contentType="blog"
-                                contentItems={blogEntries}
-                                cardContentComponent={cardContentComponent}
-                            />
-                        )}
-                        {isLoading && <Loader />}
-                        {hasErrorGettingEntries && (
-                            <Card>
-                                <p>
-                                    <em>
-                                        There was a problem retrieving our
-                                        Between the Covers posts. Please try
-                                        again in a few minutes.
-                                    </em>
-                                </p>
-                            </Card>
-                        )}
-                        {shouldShowLoadMore && (
-                            <LoadMore
-                                disabled={isLoadMoreDisabled}
-                                onSelect={this.onLoadMore}
-                            />
-                        )}
-                    </div>
+            <div className="Blog container wrapper">
+                <div className="filters">
+                    {shouldShowFilterSkeleton && <FilterSkeleton />}
+                    {shouldShowFilters && (
+                        <FilterContainer
+                            title="Blog Filters"
+                            filters={filters}
+                            onChange={this.onChange}
+                        />
+                    )}
+                </div>
+                <header>{title && <h1>{title}</h1>}</header>
+                <div
+                    className="cards filter-cards"
+                    style={{ position: 'relative' }}
+                >
+                    {shouldShowCardSkeleton &&
+                        new Array(10)
+                            .fill()
+                            .map((item, itemIndex) => (
+                                <BlogCardSkeleton key={itemIndex} />
+                            ))}
+                    {shouldShowCardList && (
+                        <CardList
+                            contentType="blog"
+                            contentItems={blogEntries}
+                            cardContentComponent={cardContentComponent}
+                        />
+                    )}
+                    {isLoading && <Loader />}
+                    {hasErrorGettingEntries && (
+                        <Card>
+                            <p>
+                                <em>
+                                    There was a problem retrieving our Between
+                                    the Covers posts. Please try again in a few
+                                    minutes.
+                                </em>
+                            </p>
+                        </Card>
+                    )}
+                    {shouldShowLoadMore && (
+                        <LoadMore
+                            disabled={isLoadMoreDisabled}
+                            onSelect={this.onLoadMore}
+                        />
+                    )}
                 </div>
             </div>
         );
