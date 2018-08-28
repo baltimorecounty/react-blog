@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from 'baltimorecounty-react-components';
-import Skeleton from 'react-loading-skeleton';
+import Skeleton from '../Skeleton/Skeleton';
 import './BlogSkeleton.css';
 
 export default class CardSkeleton extends React.Component {
