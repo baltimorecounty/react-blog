@@ -4,6 +4,12 @@ Home of the code for the BCPL Blog.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+- [BCPL Blog](#bcpl-blog)
+	- [Setup](#setup)
+	- [Running the App](#running-the-app)
+	- [Publishing the App](#publishing-the-app)
+	- [Component Properties](#component-properties)
+
 ## Setup
 
 `npm install`
