@@ -8,6 +8,7 @@ import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
 import BlogCardSkeleton from './Blog/BlogCardSkeleton';
 import FilterSkeleton from './FilterContainer/FilterSkeleton';
+import FilterInformation from './FilterInformation/FilterInformation';
 
 const propTypes = {
     title: PropTypes.string
@@ -218,6 +219,7 @@ class StructureContentList extends Component {
 
     render() {
         const {
+            activePage,
             blogEntries,
             hasErrorGettingEntries,
             isInitialized,
@@ -276,6 +278,13 @@ class StructureContentList extends Component {
                                     </em>
                                 </p>
                             </Card>
+                        )}
+                        {blogEntries.length > 0 && (
+                            <FilterInformation
+                                currentPage={activePage}
+                                recordsPerPage={viewModel.PageSize}
+                                totalRecords={viewModel.TotalRecords}
+                            />
                         )}
                         {shouldShowLoadMore && (
                             <LoadMore
