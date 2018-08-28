@@ -1,14 +1,14 @@
-# BCPL Blog
+- [BCPL Blog](#bcpl-blog)
+- [Setup](#setup)
+- [Running the App](#running-the-app)
+- [Publishing the App](#publishing-the-app)
+- [Component Properties](#component-properties)
+
+## BCPL Blog
 
 Home of the code for the BCPL Blog.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
-
-- [BCPL Blog](#bcpl-blog)
-	- [Setup](#setup)
-	- [Running the App](#running-the-app)
-	- [Publishing the App](#publishing-the-app)
-	- [Component Properties](#component-properties)
 
 ## Setup
 
@@ -21,7 +21,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Publishing the App
 
 1. `yarn build`
-1. Login to CMS and update the css and js files generated from the build in step #1
+2. Login to CMS and update the css and js files generated from the build in step #1
 
 _Note_: Make sure that your `baseUrl` is set to the appropriate environment
 
