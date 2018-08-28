@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-    currentPage: PropTypes.number.isRequired,
-    totalRecords: PropTypes.number.isRequired,
-    recordsPerPage: PropTypes.number.isRequired
+    totalRecordsShown: PropTypes.number.isRequired,
+    totalRecords: PropTypes.number.isRequired
 };
 
 export default class FilterInformation extends React.Component {
@@ -14,14 +13,15 @@ export default class FilterInformation extends React.Component {
     }
 
     render() {
-        const { currentPage, recordsPerPage, totalRecords } = this.props;
-        const visiblePages = currentPage * recordsPerPage;
+        const { totalRecordsShown, totalRecords } = this.props;
 
         return (
             <React.Fragment>
                 <em style={{ display: 'block' }}>
                     Showing{' '}
-                    {visiblePages > totalRecords ? totalRecords : visiblePages}{' '}
+                    {totalRecordsShown > totalRecords
+                        ? totalRecords
+                        : totalRecordsShown}{' '}
                     of {totalRecords} posts.
                 </em>
             </React.Fragment>
