@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "baltimorecounty-react-components": "0.0.14",
+    "baltimorecounty-react-components": "0.0.15",
     "date-fns": "^1.29.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
