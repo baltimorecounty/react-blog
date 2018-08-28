@@ -29,6 +29,7 @@ class StructureContentList extends Component {
             },
             blogEntries: [],
             activePage: 1,
+            totalRecordsShown: 0,
             activeFilters: {},
             baseUrl: this.props.baseUrl,
             isLoading: true,
@@ -142,6 +143,9 @@ class StructureContentList extends Component {
                                 filters: this.getFilterOptions(
                                     contentViewModel.FilterValues
                                 ),
+                                totalRecordsShown:
+                                    this.state.activePage *
+                                    contentViewModel.PageSize,
                                 shouldLoadMoreBeVisible
                             },
                             callback
@@ -219,7 +223,6 @@ class StructureContentList extends Component {
 
     render() {
         const {
-            activePage,
             blogEntries,
             hasErrorGettingEntries,
             isInitialized,
@@ -227,6 +230,7 @@ class StructureContentList extends Component {
             isLoadMoreDisabled,
             filters,
             shouldLoadMoreBeVisible,
+            totalRecordsShown,
             viewModel
         } = this.state;
         const { cardContentComponent, title } = this.props;
@@ -279,13 +283,13 @@ class StructureContentList extends Component {
                                 </p>
                             </Card>
                         )}
-                        {blogEntries.length > 0 && (
-                            <FilterInformation
-                                currentPage={activePage}
-                                recordsPerPage={viewModel.PageSize}
-                                totalRecords={viewModel.TotalRecords}
-                            />
-                        )}
+                        {!isLoading &&
+                            blogEntries.length > 0 && (
+                                <FilterInformation
+                                    totalRecordsShown={totalRecordsShown}
+                                    totalRecords={viewModel.TotalRecords}
+                                />
+                            )}
                         {shouldShowLoadMore && (
                             <LoadMore
                                 disabled={isLoadMoreDisabled}
