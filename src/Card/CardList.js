@@ -16,7 +16,7 @@ const defaultProps = {
 
 export default class CardList extends React.Component {
     render() {
-        const animationDelay = 250;
+        const animationDelay = 500;
         const {
             cardContentComponent: CardContentComponent,
             contentItems,
