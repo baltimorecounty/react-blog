@@ -50,7 +50,8 @@ export default class BlogCardContent extends React.Component {
                         <a href={Link}>{Title}</a>
                     </h2>
                     <div className="card-content-date">
-                        {format(PublishedDate, 'MMMM D, YYYY')} | <span>By {Author}</span>
+                        {format(PublishedDate, 'MMMM D, YYYY')} |{' '}
+                        <span>By {Author}</span>
                     </div>
                     <div className="card-content-summary SEPost_Short_Description">
                         {ShortDescription}
@@ -58,7 +59,7 @@ export default class BlogCardContent extends React.Component {
                 </div>
                 <div className="card-icon-callout hidden-xs">
                     <i
-                        className={`blog-widget-item-icon fa fa-5x ${CategoryIcon}`}
+                        className={`blog-widget-item-icon fa fa-3x ${CategoryIcon}`}
                     />
                     <p>{Category}</p>
                 </div>
