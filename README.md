@@ -44,6 +44,7 @@ _Note_: Make sure that your `baseUrl` is set to the appropriate environment
 ### Filter
 
 **field**: property name of the filter in which you want to add (property must exist in your results)
+
 **type**: right now, this can only be `radio` (`checkbox` will be added in the future)
 
 **Example**:
