@@ -10,6 +10,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 	- [Component Properties](#component-properties)
 	- [Models](#models)
 		- [Filter](#filter)
+			- [Field](#field)
+			- [Type](#type)
+			- [Example](#example)
 
 ## Setup
 
@@ -43,11 +46,18 @@ _Note_: Make sure that your `baseUrl` is set to the appropriate environment
 
 ### Filter
 
-**field**: property name of the filter in which you want to add (property must exist in your results)
+#### Field
 
-**type**: right now, this can only be `radio` (`checkbox` will be added in the future)
+Property name of the filter in which you want to add (property must exist in your results)
 
-**Example**:
+#### Type
+
+Right now, this can only be `radio` (`checkbox` will be added in the future).
+
+- **radio** - allows the user to filter by one property option at a time. Example: Category = `News`
+- **checkbox** - will allow users to select multiple property option at a time. Example:  Category = `News` **and** `Events`
+
+#### Example
 
 ```javascript
 {
