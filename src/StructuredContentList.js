@@ -8,6 +8,7 @@ import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
 import BlogCardSkeleton from './Blog/BlogCardSkeleton';
 import FilterSkeleton from './FilterContainer/FilterSkeleton';
+import FilterInformation from './FilterInformation/FilterInformation';
 
 const propTypes = {
     title: PropTypes.string
@@ -28,6 +29,7 @@ class StructureContentList extends Component {
             },
             blogEntries: [],
             activePage: 1,
+            totalRecordsShown: 0,
             activeFilters: {},
             baseUrl: this.props.baseUrl,
             isLoading: true,
@@ -141,6 +143,9 @@ class StructureContentList extends Component {
                                 filters: this.getFilterOptions(
                                     contentViewModel.FilterValues
                                 ),
+                                totalRecordsShown:
+                                    this.state.activePage *
+                                    contentViewModel.PageSize,
                                 shouldLoadMoreBeVisible
                             },
                             callback
@@ -225,6 +230,7 @@ class StructureContentList extends Component {
             isLoadMoreDisabled,
             filters,
             shouldLoadMoreBeVisible,
+            totalRecordsShown,
             viewModel
         } = this.state;
         const { cardContentComponent, title } = this.props;
@@ -279,6 +285,13 @@ class StructureContentList extends Component {
                             </p>
                         </Card>
                     )}
+                    {!isLoading &&
+                        blogEntries.length > 0 && (
+                            <FilterInformation
+                                totalRecordsShown={totalRecordsShown}
+                                totalRecords={viewModel.TotalRecords}
+                            />
+                        )}
                     {shouldShowLoadMore && (
                         <LoadMore
                             disabled={isLoadMoreDisabled}
