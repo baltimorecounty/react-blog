@@ -1,20 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 const propTypes = {
     totalRecordsShown: PropTypes.number.isRequired,
     totalRecords: PropTypes.number.isRequired
 };
-
 export default class FilterInformation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
-
     render() {
         const { totalRecordsShown, totalRecords } = this.props;
-
         return (
             <React.Fragment>
                 <em style={{ display: 'block' }}>
@@ -28,5 +24,4 @@ export default class FilterInformation extends React.Component {
         );
     }
 }
-
 FilterInformation.propTypes = propTypes;
