@@ -35,7 +35,7 @@ _Note_: Make sure that your `baseUrl` is set to the appropriate environment
 | Name                 | Type   | Default | Description                                                     | Is Required? |
 | -------------------- | ------ | ------- | --------------------------------------------------------------- | ------------ |
 | baseUrl              | string | n/a     | Api Endpoint for the Blog                                       | Yes          |
-| filters              | array  | n/a     | A list of [#filter] to include in the app                       | No           |
+| filters              | array  | n/a     | A list of [filters](#filter) to include in the app              | No           |
 | cardContentComponent | Node   | n/a     | A custom component to display the results of your endpoint call | Yes          |
 | title                | string | ''      | H1 to show in your app                                          | No           |
 
