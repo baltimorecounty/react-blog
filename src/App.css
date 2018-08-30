@@ -47,6 +47,6 @@ li.disabled a {
     text-align: center;
 }
 
-.skeleton * {
+.skeleton .skeleton-height-100 * {
     height: 100%;
 }

@@ -8,6 +8,7 @@ import './App.css';
 import { BuildFilterExpression, Operators } from './Utils/ApiHelper';
 import BlogCardSkeleton from './Blog/BlogCardSkeleton';
 import FilterSkeleton from './FilterContainer/FilterSkeleton';
+import FilterInformation from './FilterInformation/FilterInformation';
 
 const propTypes = {
     title: PropTypes.string
@@ -28,6 +29,7 @@ class StructureContentList extends Component {
             },
             blogEntries: [],
             activePage: 1,
+            totalRecordsShown: 0,
             activeFilters: {},
             baseUrl: this.props.baseUrl,
             isLoading: true,
@@ -141,6 +143,9 @@ class StructureContentList extends Component {
                                 filters: this.getFilterOptions(
                                     contentViewModel.FilterValues
                                 ),
+                                totalRecordsShown:
+                                    this.state.activePage *
+                                    contentViewModel.PageSize,
                                 shouldLoadMoreBeVisible
                             },
                             callback
@@ -225,6 +230,7 @@ class StructureContentList extends Component {
             isLoadMoreDisabled,
             filters,
             shouldLoadMoreBeVisible,
+            totalRecordsShown,
             viewModel
         } = this.state;
         const { cardContentComponent, title } = this.props;
@@ -238,52 +244,60 @@ class StructureContentList extends Component {
             viewModel.TotalPages && !isLoading && shouldLoadMoreBeVisible;
 
         return (
-            <div className="Blog container">
-                <div className="row">
-                    <div className="col-md-3">
-                        {shouldShowFilterSkeleton && <FilterSkeleton />}
-                        {shouldShowFilters && (
-                            <FilterContainer
-                                title="Blog Filters"
-                                filters={filters}
-                                onChange={this.onChange}
+            <div className="Blog container wrapper">
+                <div className="filters">
+                    {shouldShowFilterSkeleton && <FilterSkeleton />}
+                    {shouldShowFilters && (
+                        <FilterContainer
+                            title="Blog Filters"
+                            filters={filters}
+                            onChange={this.onChange}
+                        />
+                    )}
+                </div>
+                <header>{title && <h1>{title}</h1>}</header>
+                <div
+                    className="cards filter-cards"
+                    style={{ position: 'relative' }}
+                >
+                    {shouldShowCardSkeleton &&
+                        new Array(10)
+                            .fill()
+                            .map((item, itemIndex) => (
+                                <BlogCardSkeleton key={itemIndex} />
+                            ))}
+                    {shouldShowCardList && (
+                        <CardList
+                            contentType="blog"
+                            contentItems={blogEntries}
+                            cardContentComponent={cardContentComponent}
+                        />
+                    )}
+                    {isLoading && <Loader />}
+                    {hasErrorGettingEntries && (
+                        <Card>
+                            <p>
+                                <em>
+                                    There was a problem retrieving our Between
+                                    the Covers posts. Please try again in a few
+                                    minutes.
+                                </em>
+                            </p>
+                        </Card>
+                    )}
+                    {!isLoading &&
+                        blogEntries.length > 0 && (
+                            <FilterInformation
+                                totalRecordsShown={totalRecordsShown}
+                                totalRecords={viewModel.TotalRecords}
                             />
                         )}
-                    </div>
-                    <div className="col-md-9" style={{ position: 'relative' }}>
-                        {title && <h1>{title}</h1>}
-                        {shouldShowCardSkeleton &&
-                            new Array(10)
-                                .fill()
-                                .map((item, itemIndex) => (
-                                    <BlogCardSkeleton key={itemIndex} />
-                                ))}
-                        {shouldShowCardList && (
-                            <CardList
-                                contentType="blog"
-                                contentItems={blogEntries}
-                                cardContentComponent={cardContentComponent}
-                            />
-                        )}
-                        {isLoading && <Loader />}
-                        {hasErrorGettingEntries && (
-                            <Card>
-                                <p>
-                                    <em>
-                                        There was a problem retrieving our
-                                        Between the Covers posts. Please try
-                                        again in a few minutes.
-                                    </em>
-                                </p>
-                            </Card>
-                        )}
-                        {shouldShowLoadMore && (
-                            <LoadMore
-                                disabled={isLoadMoreDisabled}
-                                onSelect={this.onLoadMore}
-                            />
-                        )}
-                    </div>
+                    {shouldShowLoadMore && (
+                        <LoadMore
+                            disabled={isLoadMoreDisabled}
+                            onSelect={this.onLoadMore}
+                        />
+                    )}
                 </div>
             </div>
         );

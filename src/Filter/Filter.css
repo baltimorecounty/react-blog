@@ -1,11 +1,15 @@
 .bc_filters {
-    margin: 0 0 19.2px 0;
+    margin: 0;
     width: 100%;
 }
 
 .filter-toggle {
     display: flex;
     justify-content: space-between;
+}
+
+.filter-toggle i {
+    cursor: pointer;
 }
 
 .filter-list-container {
@@ -19,6 +23,7 @@
 }
 
 .filter-list li label {
+    align-items: baseline;
     display: flex;
     margin-bottom: 4px;
     padding: 2px 0;
