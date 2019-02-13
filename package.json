@@ -5,6 +5,7 @@
   "dependencies": {
     "baltimorecounty-react-components": "0.0.15",
     "date-fns": "^1.29.0",
+    "moment": "^2.24.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
