@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
-import "./App.css";
+
 
 const propTypes = {
   contentItem: PropTypes.object.isRequired

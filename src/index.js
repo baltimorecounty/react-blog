@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import StructureContentList from './StructuredContentList';
 import BlogCardContent from './Blog/BlogCardContent';
-
+import "./App.css";
 const filters = [
     {
         field: 'Category',
