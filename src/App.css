@@ -1,52 +1,57 @@
 .pager {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .pager li {
-    display: inline-block;
-    border: 1px solid lightgray;
+  display: inline-block;
+  border: 1px solid lightgray;
 }
 
 .pager li a {
-    display: block;
-    margin-bottom: 0;
+  display: block;
+  margin-bottom: 0;
 }
 
 .pager li button.active {
-    background: blue;
-    color: white;
+  background: blue;
+  color: white;
 }
 
 .btn.active,
 .btn.active:focus,
 .btn:focus,
 li.active .btn {
-    background: #00a19b;
-    color: white;
+  background: #00a19b;
+  color: white;
 }
 
 .btn:hover,
 .btn:hover:focus,
 li.active:hover {
-    background: #137875 !important;
-    color: white !important;
+  background: #137875 !important;
+  color: white !important;
 }
 
 li.disabled a {
-    cursor: not-allowed;
-    opacity: 0.65;
-    filter: alpha(opacity=65);
-    -webkit-box-shadow: none;
-    box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .bc_loader {
-    margin: 15px auto;
-    text-align: center;
+  margin: 15px auto;
+  text-align: center;
 }
 
 .skeleton .skeleton-height-100 * {
-    height: 100%;
+  height: 100%;
+}
+.pin-icon {
+  color: gray;
+  font-size: 1.5em;
+  transform: rotate(-45deg);
 }
