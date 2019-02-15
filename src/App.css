@@ -54,4 +54,9 @@ li.disabled a {
   color: gray;
   font-size: 1.5em;
   transform: rotate(-45deg);
+  position: absolute;
+  left: 0;
+  padding:5px;
+  top:5px;
+
 }
