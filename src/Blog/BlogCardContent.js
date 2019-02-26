@@ -37,14 +37,15 @@ export default class BlogCardContent extends React.Component {
 
     return (
       <React.Fragment>
-      <div class="box">
-         <div class="ribbon ribbon-top-right"><span>Featured</span></div>
-        {/* <div className="card-content-img-container"> */}
+      
+        <div className="card-content-img-container">
           {/* <div className="fa fa-thumb-tack pin-icon" aria-hidden='true'> </div>  */}
           {Pin_Blog_Entry === true && this.props.indexItems === 0 ? (
-            <div className="ribbon ribbon-top-right" aria-hidden="true">
+           <div class="box">
+           <div class="ribbon ribbon-top-right"><span>Featured</span>
               {" "}
-            </div>
+              </div>
+              </div>
           ) : (
             ""
           )}
@@ -56,7 +57,7 @@ export default class BlogCardContent extends React.Component {
             />
           </a>
         </div>
-        {/* </div> */}
+        
 
         <div className="card-content">
           <h2 className="card-heading">
