@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
 
-
 const propTypes = {
   contentItem: PropTypes.object.isRequired
 };
@@ -39,8 +38,11 @@ export default class BlogCardContent extends React.Component {
     return (
       <React.Fragment>
         <div className="card-content-img-container">
-        {Pin_Blog_Entry === true && this.props.indexItems === 0 ? (
-            <div className="fa fa-thumb-tack pin-icon" aria-hidden='true'> </div>
+          {/* <div className="fa fa-thumb-tack pin-icon" aria-hidden='true'> </div>  */}
+          {Pin_Blog_Entry === true && this.props.indexItems === 0 ? (
+            <div className="ribbon ribbon-top-right" aria-hidden="true">
+              {" "}
+            </div>
           ) : (
             ""
           )}
@@ -53,8 +55,6 @@ export default class BlogCardContent extends React.Component {
           </a>
         </div>
         <div className="card-content">
-       
-
           <h2 className="card-heading">
             <a href={Link}>{Title}</a>
           </h2>
