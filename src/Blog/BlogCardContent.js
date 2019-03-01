@@ -32,7 +32,7 @@ export default class BlogCardContent extends React.Component {
       ImageAlt,
       Pin_Blog_Entry
     } = this.props.contentItem;
-    // console.log(this.props.contentItem);
+
     const postImage = ImageUrl || getCategoryImage(Category);
 
     return (
@@ -41,8 +41,8 @@ export default class BlogCardContent extends React.Component {
         <div className="card-content-img-container">
           {/* <div className="fa fa-thumb-tack pin-icon" aria-hidden='true'> </div>  */}
           {Pin_Blog_Entry === true && this.props.indexItems === 0 ? (
-           <div class="box">
-           <div class="ribbon ribbon-top-right"><span>Featured</span>
+           <div className="box">
+           <div className="ribbon ribbon-top-right"><span>Featured</span>
               {" "}
               </div>
               </div>
