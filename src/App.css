@@ -50,16 +50,6 @@ li.disabled a {
 .skeleton .skeleton-height-100 * {
   height: 100%;
 }
-/* .pin-icon {
-  color: gray;
-  font-size: 1.5em;
-  transform: rotate(-45deg);
-  position: absolute;
-  left: 0;
-  padding:5px;
-  top:5px;
-
-} */
 .ribbon {
   width: 150px;
   height: 150px;
