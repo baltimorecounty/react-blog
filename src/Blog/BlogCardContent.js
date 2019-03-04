@@ -39,7 +39,6 @@ export default class BlogCardContent extends React.Component {
       <React.Fragment>
       
         <div className="card-content-img-container">
-          {/* <div className="fa fa-thumb-tack pin-icon" aria-hidden='true'> </div>  */}
           {Pin_Blog_Entry === true && this.props.indexItems === 0 ? (
            <div className="box">
            <div className="ribbon ribbon-top-right"><span>Featured</span>
