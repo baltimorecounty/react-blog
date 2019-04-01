@@ -94,11 +94,10 @@ class StructureContentList extends Component {
 
     return this.state.filters.map(filter => filter.field);
   }
-  getTopOneElement(blogEntries) {
-
+  getIsFeaturedBlog(blogEntries) {
     return blogEntries.find(entry => entry.IsFeatured);
-
   }
+  
   getMergeElements(topOneElement, blogEntries) {
     let mergeElements = [];
     if (topOneElement.length > 0) {
@@ -161,7 +160,8 @@ class StructureContentList extends Component {
             let mergeElements = [];
             let topOneElement = [...flagBlogEntry];
             if (this.getAppliedFilterList().length === 0) {
-              topOneElement = this.getTopOneElement(blogEntries);
+              topOneElement = this.getIsFeaturedBlog
+              (blogEntries);
             }
             mergeElements = this.getMergeElements(topOneElement, blogEntries);
 
