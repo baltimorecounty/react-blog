@@ -95,12 +95,12 @@ class StructureContentList extends Component {
 
   getMergeElements(topOneElement, blogEntries) {
     let mergeElements = [];
-    console.log(topOneElement);
-    if (topOneElement === undefined) {
+    if (topOneElement !== undefined) {
       let restElements = blogEntries.filter((i) => i.Id !== topOneElement[0].Id);
       mergeElements = [...topOneElement, ...restElements];
     }
     else {
+ 
       mergeElements = [...blogEntries];
     }
     return mergeElements;
@@ -141,7 +141,7 @@ class StructureContentList extends Component {
       },
       () => {
         const requestUrl = this.getRequestUrl();
-    
+
         fetch(requestUrl)
           .then(response => response.json())
           .then(contentViewModel => {
@@ -151,7 +151,7 @@ class StructureContentList extends Component {
             const shouldLoadMoreBeVisible = !(
               contentViewModel.TotalRecords === blogEntries.length
             );
-            
+
             const flagBlogEntry = this.state.flagBlogEntry;
             let mergeElements = [];
             let topOneElement = [...flagBlogEntry];
