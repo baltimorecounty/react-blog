@@ -94,9 +94,9 @@ class StructureContentList extends Component {
   }
 
   getMergeElements(topOneElement, blogEntries) {
-    let mergeElements = [];
+    let mergeElements = [];   
     if (topOneElement !== undefined) {
-      let restElements = blogEntries.filter((i) => i.Id !== topOneElement[0].Id);
+      let restElements = blogEntries.filter((i) => i.Id !== topOneElement.Id);
       mergeElements = [...topOneElement, ...restElements];
     }
     else {
