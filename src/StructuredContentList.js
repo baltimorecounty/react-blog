@@ -95,20 +95,8 @@ class StructureContentList extends Component {
     return this.state.filters.map(filter => filter.field);
   }
   getTopOneElement(blogEntries) {
-    let topOneElement = [];
-    topOneElement = _.slice(
-      _.orderBy(
-        blogEntries,
-        [
-          "IsFeatured",
-          moment(["PublishedDate"]).format("MMM Do YY")
-        ],
-        ["desc", "asc"]
-      ),
-      0,
-      1
-    );
-    return topOneElement;
+
+    return blogEntries.find(entry => entry.IsFeatured);
 
   }
   getMergeElements(topOneElement, blogEntries) {
