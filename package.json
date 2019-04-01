@@ -1,17 +1,17 @@
 {
   "name": "react-blog",
   "version": "0.1.0",
-  "dependencies": {	
-    "baltimorecounty-react-components": "0.0.15",	
-    "date-fns": "^1.29.0",	
-    "react": "^16.4.1",	
-    "react-bootstrap": "^0.32.1",	
-    "react-dom": "^16.4.1",	
-    "react-loading-skeleton": "^0.5.0",	
-    "react-paginate": "^5.2.3",	
-    "react-scripts": "1.1.4",	
-    "react-slidedown": "^1.3.0",	
-    "react-transition-group": "^1.2.1"	
+  "dependencies": {
+    "baltimorecounty-react-components": "0.0.15",
+    "date-fns": "^1.29.0",
+    "react": "^16.4.1",
+    "react-bootstrap": "^0.32.1",
+    "react-dom": "^16.4.1",
+    "react-loading-skeleton": "^0.5.0",
+    "react-paginate": "^5.2.3",
+    "react-scripts": "1.1.4",
+    "react-slidedown": "^1.3.0",
+    "react-transition-group": "^1.2.1"
   },
   "private": true,
   "scripts": {
