@@ -91,9 +91,9 @@ class StructureContentList extends Component {
 
   getActiveFilters() {
     // filters are the distinct fields being returned, if there are some in the app, these should always be added to the query string
-
     return this.state.filters.map(filter => filter.field);
   }
+
   getTopOneElement(blogEntries) {
     let topOneElement = [];
     topOneElement = _.slice(
