@@ -24,7 +24,8 @@ export default class BlogCardContent extends React.Component {
       Title,
       PublishedDate,
       Author,
-      ShortDescription, Category,
+      ShortDescription,
+      Category,
       CategoryIcon,
       Link,
       ImageUrl,
@@ -37,11 +38,16 @@ export default class BlogCardContent extends React.Component {
     return (
       <React.Fragment>
         <div className="card-content-img-container">
-          {IsFeatured && this.props.indexItems === 0 ?
-            (<div className="box">
-              <div className="ribbon ribbon-top-right"><span>Featured</span>{" "}</div>
+          {IsFeatured && this.props.indexItems === 0 ? (
+            <div className="box">
+              <div className="ribbon ribbon-top-right">
+                <span>Featured</span>{" "}
+              </div>
             </div>
-            ) : ("")}<a href={Link}>
+          ) : (
+            ""
+          )}
+          <a href={Link}>
             <img
               alt={ImageAlt}
               className="card-content-img"
