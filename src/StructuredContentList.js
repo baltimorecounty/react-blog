@@ -91,13 +91,12 @@ class StructureContentList extends Component {
 
   getActiveFilters() {
     // filters are the distinct fields being returned, if there are some in the app, these should always be added to the query string
-
     return this.state.filters.map(filter => filter.field);
   }
   getIsFeaturedBlog(blogEntries) {
     return blogEntries.find(entry => entry.IsFeatured);
   }
-  
+
   getMergeElements(topOneElement, blogEntries) {
     let mergeElements = [];
     if (topOneElement.length > 0) {
