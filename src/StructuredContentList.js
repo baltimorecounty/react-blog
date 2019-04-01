@@ -9,8 +9,6 @@ import { BuildFilterExpression, Operators } from "./Utils/ApiHelper";
 import BlogCardSkeleton from "./Blog/BlogCardSkeleton";
 import FilterSkeleton from "./FilterContainer/FilterSkeleton";
 import FilterInformation from "./FilterInformation/FilterInformation";
-import _ from "lodash";
-import * as moment from "moment";
 
 const propTypes = {
   title: PropTypes.string
@@ -68,14 +66,12 @@ class StructureContentList extends Component {
     if (appliedFilterQuery) {
       queryParams.push(`$filter=${appliedFilterQuery}`);
     }
-
     return queryParams.join("&");
   }
 
   buildQueryString() {
     const queryString = this.buildFilterQueryString();
     const activePage = this.state.activePage;
-
     return queryString
       ? `?page=${activePage}&${queryString}`
       : `?page=${activePage}`;
@@ -99,7 +95,8 @@ class StructureContentList extends Component {
 
   getMergeElements(topOneElement, blogEntries) {
     let mergeElements = [];
-    if (topOneElement) {
+    console.log(topOneElement);
+    if (topOneElement === undefined) {
       let restElements = blogEntries.filter((i) => i.Id !== topOneElement[0].Id);
       mergeElements = [...topOneElement, ...restElements];
     }
@@ -144,7 +141,7 @@ class StructureContentList extends Component {
       },
       () => {
         const requestUrl = this.getRequestUrl();
-
+    
         fetch(requestUrl)
           .then(response => response.json())
           .then(contentViewModel => {
@@ -154,16 +151,14 @@ class StructureContentList extends Component {
             const shouldLoadMoreBeVisible = !(
               contentViewModel.TotalRecords === blogEntries.length
             );
-
+            
             const flagBlogEntry = this.state.flagBlogEntry;
             let mergeElements = [];
             let topOneElement = [...flagBlogEntry];
             if (this.getAppliedFilterList().length === 0) {
-              topOneElement = this.getIsFeaturedBlog
-              (blogEntries);
+              topOneElement = this.getIsFeaturedBlog(blogEntries);
             }
             mergeElements = this.getMergeElements(topOneElement, blogEntries);
-
             this.setState(
               {
                 isLoading: false,
