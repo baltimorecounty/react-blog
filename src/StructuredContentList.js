@@ -107,6 +107,7 @@ class StructureContentList extends Component {
     );
     return topOneElement;
   }
+
   getMergeElements(topOneElement, blogEntries) {
     let mergeElements = [];
     if (topOneElement.length > 0) {
