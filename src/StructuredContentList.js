@@ -42,10 +42,10 @@ class StructureContentList extends Component {
       hasErrorGettingEntries: false,
       filters: this.props.filters
         ? this.props.filters.map(filter => {
-            filter.options = []; // ensure options
+          filter.options = []; // ensure options
 
-            return filter;
-          })
+          return filter;
+        })
         : []
     };
 
@@ -53,7 +53,7 @@ class StructureContentList extends Component {
     this.getFilterOptions = this.getFilterOptions.bind(this);
     this.getActiveFilters = this.getActiveFilters.bind(this);
     this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
-   
+
     this.onLoadMore = this.onLoadMore.bind(this);
   }
 
@@ -94,36 +94,33 @@ class StructureContentList extends Component {
 
     return this.state.filters.map(filter => filter.field);
   }
-  getTopOneElement(blogEntries)
-  {
-    let topOneElement=[];
-      topOneElement = _.slice(
-     _.orderBy(
-         blogEntries,
-         [
-           "Pin_Blog_Entry",
-           moment(["PublishedDate"]).format("MMM Do YY")
-         ],
-         ["desc", "asc"]
-     ),
-       0,
-       1
-     );
-  return topOneElement;
+  getTopOneElement(blogEntries) {
+    let topOneElement = [];
+    topOneElement = _.slice(
+      _.orderBy(
+        blogEntries,
+        [
+          "IsFeatured",
+          moment(["PublishedDate"]).format("MMM Do YY")
+        ],
+        ["desc", "asc"]
+      ),
+      0,
+      1
+    );
+    return topOneElement;
 
   }
-  getMergeElements(topOneElement,blogEntries)
-  {  let mergeElements=[];
-    if  (topOneElement.length > 0 )
-    {
+  getMergeElements(topOneElement, blogEntries) {
+    let mergeElements = [];
+    if (topOneElement.length > 0) {
       let restElements = blogEntries.filter((i) => i.Id !== topOneElement[0].Id);
       mergeElements = [...topOneElement, ...restElements];
     }
-    else
-    {
+    else {
       mergeElements = [...blogEntries];
     }
- return mergeElements;
+    return mergeElements;
   }
 
   getAppliedFilterList() {
@@ -145,7 +142,7 @@ class StructureContentList extends Component {
             Operators.Equal,
             filter.value[0]
           );
-        
+
         }
         return null;
       });
@@ -161,32 +158,31 @@ class StructureContentList extends Component {
       },
       () => {
         const requestUrl = this.getRequestUrl();
-      
+
         fetch(requestUrl)
           .then(response => response.json())
           .then(contentViewModel => {
             const blogEntries = this.state.blogEntries
-               .slice()
-               .concat(contentViewModel.Results.Contents);
-             const shouldLoadMoreBeVisible = !(
-               contentViewModel.TotalRecords === blogEntries.length
-             );
-            
-             const flagBlogEntry =  this.state.flagBlogEntry;
-            let mergeElements=[];
-            let topOneElement=[...flagBlogEntry];
-            if (this.getAppliedFilterList().length ===0 )
-            {
-              topOneElement=  this.getTopOneElement(blogEntries);
+              .slice()
+              .concat(contentViewModel.Results.Contents);
+            const shouldLoadMoreBeVisible = !(
+              contentViewModel.TotalRecords === blogEntries.length
+            );
+
+            const flagBlogEntry = this.state.flagBlogEntry;
+            let mergeElements = [];
+            let topOneElement = [...flagBlogEntry];
+            if (this.getAppliedFilterList().length === 0) {
+              topOneElement = this.getTopOneElement(blogEntries);
             }
-            mergeElements = this.getMergeElements(topOneElement,blogEntries);
+            mergeElements = this.getMergeElements(topOneElement, blogEntries);
 
             this.setState(
               {
                 isLoading: false,
                 viewModel: contentViewModel,
                 blogEntries: mergeElements,
-                flagBlogEntry:topOneElement,
+                flagBlogEntry: topOneElement,
                 filters: this.getFilterOptions(contentViewModel.FilterValues),
                 totalRecordsShown:
                   this.state.activePage * contentViewModel.PageSize,
@@ -228,10 +224,10 @@ class StructureContentList extends Component {
   }
 
   onChange(filter) {
-   
+
     const { field, values } = filter;
     const newActiveFilters = { ...this.state.activeFilters };
-  
+
     if (values.length) {
       newActiveFilters[field] = values;
     } else {
