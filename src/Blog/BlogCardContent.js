@@ -30,24 +30,23 @@ export default class BlogCardContent extends React.Component {
       Link,
       ImageUrl,
       ImageAlt,
-      Pin_Blog_Entry
+      IsFeatured
     } = this.props.contentItem;
 
     const postImage = ImageUrl || getCategoryImage(Category);
 
     return (
       <React.Fragment>
-      
+
         <div className="card-content-img-container">
-          {Pin_Blog_Entry === true && this.props.indexItems === 0 ? (
-           <div className="box">
-           <div className="ribbon ribbon-top-right"><span>Featured</span>
+          {IsFeatured && this.props.indexItems === 0 ? (<div className="box">
+            <div className="ribbon ribbon-top-right"><span>Featured</span>
               {" "}
-              </div>
-              </div>
+            </div>
+          </div>
           ) : (
-            ""
-          )}
+              ""
+            )}
           <a href={Link}>
             <img
               alt={ImageAlt}
@@ -56,8 +55,6 @@ export default class BlogCardContent extends React.Component {
             />
           </a>
         </div>
-        
-
         <div className="card-content">
           <h2 className="card-heading">
             <a href={Link}>{Title}</a>
