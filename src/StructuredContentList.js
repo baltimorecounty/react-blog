@@ -94,13 +94,12 @@ class StructureContentList extends Component {
   }
 
   getMergeElements(topOneElement, blogEntries) {
-    let mergeElements = [];   
-    if (topOneElement !== undefined) {
+    let mergeElements = [];
+    if (topOneElement) {
       let restElements = blogEntries.filter((i) => i.Id !== topOneElement.Id);
-      mergeElements = [...topOneElement, ...restElements];
+      mergeElements = [topOneElement, ...restElements];
     }
     else {
- 
       mergeElements = [...blogEntries];
     }
     return mergeElements;
@@ -152,9 +151,8 @@ class StructureContentList extends Component {
               contentViewModel.TotalRecords === blogEntries.length
             );
 
-            const flagBlogEntry = this.state.flagBlogEntry;
+            let topOneElement = this.state.flagBlogEntry;
             let mergeElements = [];
-            let topOneElement = [...flagBlogEntry];
             if (this.getAppliedFilterList().length === 0) {
               topOneElement = this.getIsFeaturedBlog(blogEntries);
             }
