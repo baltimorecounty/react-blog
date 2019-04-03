@@ -94,7 +94,7 @@ class StructureContentList extends Component {
     return blogEntries.find(entry => entry.IsFeatured);
   }
 
-  getMergeElements(featuredEntry, blogEntries) {
+  getSortedBlogEntries(featuredEntry, blogEntries) {
     if (featuredEntry) {
       let restElements = blogEntries.filter((i) => i.Id !== featuredEntry.Id);
       return [featuredEntry, ...restElements];
@@ -153,7 +153,7 @@ class StructureContentList extends Component {
             if (this.getAppliedFilterList().length === 0) {
               topOneElement = this.getIsFeaturedBlog(blogEntries);
             }
-            mergeElements = this.getMergeElements(topOneElement, blogEntries);
+            mergeElements = this.getSortedBlogEntries(topOneElement, blogEntries);
             this.setState(
               {
                 isLoading: false,
