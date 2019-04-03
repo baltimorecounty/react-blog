@@ -89,20 +89,17 @@ class StructureContentList extends Component {
     // filters are the distinct fields being returned, if there are some in the app, these should always be added to the query string
     return this.state.filters.map(filter => filter.field);
   }
+
   getIsFeaturedBlog(blogEntries) {
     return blogEntries.find(entry => entry.IsFeatured);
   }
 
-  getMergeElements(topOneElement, blogEntries) {
-    let mergeElements = [];
-    if (topOneElement) {
-      let restElements = blogEntries.filter((i) => i.Id !== topOneElement.Id);
-      mergeElements = [topOneElement, ...restElements];
+  getMergeElements(featuredEntry, blogEntries) {
+    if (featuredEntry) {
+      let restElements = blogEntries.filter((i) => i.Id !== featuredEntry.Id);
+      return [featuredEntry, ...restElements];
     }
-    else {
-      mergeElements = [...blogEntries];
-    }
-    return mergeElements;
+    return blogEntries;
   }
 
   getAppliedFilterList() {
