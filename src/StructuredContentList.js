@@ -26,8 +26,8 @@ class StructureContentList extends Component {
         Results: {
           Contents: []
         }
-      },
-      flagBlogEntry: [],
+	  },
+      featuredBlogEntry: null,
       blogEntries: [],
       activePage: 1,
       totalRecordsShown: 0,
@@ -41,7 +41,6 @@ class StructureContentList extends Component {
       filters: this.props.filters
         ? this.props.filters.map(filter => {
           filter.options = []; // ensure options
-
           return filter;
         })
         : []
@@ -51,7 +50,6 @@ class StructureContentList extends Component {
     this.getFilterOptions = this.getFilterOptions.bind(this);
     this.getActiveFilters = this.getActiveFilters.bind(this);
     this.getAppliedFiltersQuery = this.getAppliedFiltersQuery.bind(this);
-
     this.onLoadMore = this.onLoadMore.bind(this);
   }
 
@@ -130,6 +128,11 @@ class StructureContentList extends Component {
     return "";
   }
 
+  isFeaturedCategorySelected(activeFilters, category) {
+	return Object.keys(activeFilters).length === 0 || Object.prototype.hasOwnProperty.call(activeFilters, 'Category') &&
+	(activeFilters.Category.indexOf(category) > -1 || activeFilters.Category.filter(filter => !!filter).length === 0);
+  }
+
   getBlogEntries(callback) {
     this.setState(
       {
@@ -141,34 +144,35 @@ class StructureContentList extends Component {
         fetch(requestUrl)
           .then(response => response.json())
           .then(contentViewModel => {
-            const blogEntries = this.state.blogEntries
+			const { activeFilters, activePage, blogEntries, featuredBlogEntry} = this.state;
+            const updatedBlogEntries = blogEntries
               .slice()
               .concat(contentViewModel.Results.Contents);
             const shouldLoadMoreBeVisible = !(
-              contentViewModel.TotalRecords === blogEntries.length
-            );
+              contentViewModel.TotalRecords === updatedBlogEntries.length
+			);
+			const updatedFeaturedBlogEntry = featuredBlogEntry || this.getFeaturedBlogEntry(updatedBlogEntries);
+			const sortedBlogEntries = this.isFeaturedCategorySelected(activeFilters, updatedFeaturedBlogEntry.Category)
+				? this.getSortedBlogEntries(updatedFeaturedBlogEntry, updatedBlogEntries)
+				: updatedBlogEntries;
+			const filters = this.getFilterOptions(contentViewModel.FilterValues);
+			const totalRecordsShown = activePage * contentViewModel.PageSize;
 
-            let topOneElement = this.state.flagBlogEntry;
-            let mergeElements = [];
-            if (this.getAppliedFilterList().length === 0) {
-              topOneElement = this.getFeaturedBlogEntry(blogEntries);
-            }
-            mergeElements = this.getSortedBlogEntries(topOneElement, blogEntries);
             this.setState(
               {
                 isLoading: false,
                 viewModel: contentViewModel,
-                blogEntries: mergeElements,
-                flagBlogEntry: topOneElement,
-                filters: this.getFilterOptions(contentViewModel.FilterValues),
-                totalRecordsShown:
-                  this.state.activePage * contentViewModel.PageSize,
+                blogEntries: sortedBlogEntries,
+                featuredBlogEntry: updatedFeaturedBlogEntry,
+                filters,
+                totalRecordsShown,
                 shouldLoadMoreBeVisible
               },
               callback
             );
           })
           .catch(error => {
+			  console.log(error)
             this.setState(
               {
                 hasErrorGettingEntries: true,
@@ -277,7 +281,6 @@ class StructureContentList extends Component {
         <div className="cards filter-cards" style={{ position: "relative" }}>
           {shouldShowCardSkeleton &&
             new Array(10)
-
               .fill()
               .map((item, itemIndex) => <BlogCardSkeleton key={itemIndex} />)}
           {shouldShowCardList && (
