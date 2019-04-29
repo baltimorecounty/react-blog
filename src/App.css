@@ -55,18 +55,18 @@ li.disabled a {
   width: 150px;
   height: 150px;
   overflow: hidden;
-  position: relative;
+  position: absolute;
 }
 .ribbon::before,
 .ribbon::after {
-  position: relative;
+  position: absolute;
   z-index: -1;
   content: '';
   display: block;
   border: 5px solid #999;
 }
 .ribbon span {
-  position: relative;
+  position: absolute;
   display: block;
   width: 225px;
   padding: 15px 0;
