@@ -1,49 +1,53 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { CSSTransitionGroup } from 'react-transition-group'; // ES6
-import { Card } from 'baltimorecounty-react-components';
-import './CardList.css';
-
+import React from "react";
+import PropTypes from "prop-types";
+import { CSSTransitionGroup } from "react-transition-group"; // ES6
+import { Card } from "baltimorecounty-react-components";
+import "./CardList.css";
 const propTypes = {
-    contentType: PropTypes.string,
-    contentItems: PropTypes.array
+  contentType: PropTypes.string,
+  contentItems: PropTypes.array
 };
 
 const defaultProps = {
-    contentItems: [],
-    contentType: 'default'
+  contentItems: [],
+  contentType: "default"
 };
 
 export default class CardList extends React.Component {
-    render() {
-        const animationDelay = 500;
-        const {
-            cardContentComponent: CardContentComponent,
-            contentItems,
-            contentType
-        } = this.props;
-        const cards = contentItems.map(contentItem => {
-            return (
-                <Card key={contentItem.Id} cardType={contentType}>
-                    <CardContentComponent contentItem={contentItem} />
-                </Card>
-            );
-        });
+  render() {
+    const animationDelay = 500;
+    const {
+      cardContentComponent: CardContentComponent,
+      contentItems,
+      contentType
+    } = this.props;
 
-        return (
-            <React.Fragment>
-                <CSSTransitionGroup
-                    transitionName="list-fade"
-                    transitionEnterTimeout={animationDelay}
-                    transitionLeaveTimeout={animationDelay}
-                    transitionAppear={true}
-                    transitionAppearTimeout={animationDelay}
-                >
-                    {cards}
-                </CSSTransitionGroup>
-            </React.Fragment>
-        );
-    }
+    const cards = contentItems.map((contentItem, itemIndex) => {
+
+      return (
+        <Card key={contentItem.Id} cardType={contentType}>
+          <CardContentComponent
+            contentItem={contentItem}
+            indexItems={itemIndex}
+          />
+        </Card>
+      );
+    });
+
+    return (
+      <React.Fragment>
+        <CSSTransitionGroup
+          transitionName="list-fade"
+          transitionEnterTimeout={animationDelay}
+          transitionLeaveTimeout={animationDelay}
+          transitionAppear={true}
+          transitionAppearTimeout={animationDelay}
+        >
+          {cards}
+        </CSSTransitionGroup>
+      </React.Fragment>
+    );
+  }
 }
 
 CardList.propTypes = propTypes;

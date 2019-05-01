@@ -1,52 +1,103 @@
 .pager {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .pager li {
-    display: inline-block;
-    border: 1px solid lightgray;
+  display: inline-block;
+  border: 1px solid lightgray;
 }
 
 .pager li a {
-    display: block;
-    margin-bottom: 0;
+  display: block;
+  margin-bottom: 0;
 }
 
 .pager li button.active {
-    background: blue;
-    color: white;
+  background: blue;
+  color: white;
 }
 
 .btn.active,
 .btn.active:focus,
 .btn:focus,
 li.active .btn {
-    background: #00a19b;
-    color: white;
+  background: #00a19b;
+  color: white;
 }
 
 .btn:hover,
 .btn:hover:focus,
 li.active:hover {
-    background: #137875 !important;
-    color: white !important;
+  background: #137875 !important;
+  color: white !important;
 }
 
 li.disabled a {
-    cursor: not-allowed;
-    opacity: 0.65;
-    filter: alpha(opacity=65);
-    -webkit-box-shadow: none;
-    box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 
 .bc_loader {
-    margin: 15px auto;
-    text-align: center;
+  margin: 15px auto;
+  text-align: center;
 }
 
 .skeleton .skeleton-height-100 * {
-    height: 100%;
+  height: 100%;
+}
+
+.ribbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  display: block;
+  border: 5px solid #999;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 225px;
+  padding: 15px 0;
+  background-color: #802754;
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  color: #fff;
+  font: 600 16px/1 'Open Sans', sans-serif;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.ribbon-top-right {
+  top: -10px;
+  right: -10px;
+}
+.ribbon-top-right::before,
+.ribbon-top-right::after {
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+.ribbon-top-right::before {
+  top: 0;
+  left: 0;
+}
+.ribbon-top-right::after {
+  bottom: 0;
+  right: 0;
+}
+.ribbon-top-right span {
+  left: -25px;
+  top: 30px;
+  transform: rotate(45deg);
 }
