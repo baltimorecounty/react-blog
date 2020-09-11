@@ -2,9 +2,9 @@ import { Config } from "@baltimorecounty/javascript-utilities";
 
 const { setConfig, getValue } = Config;
 
-const apiPath = "/api/structured-content/blog";
-const testApiRoot = `https://testservices.bcpl.info${apiPath}`;
-const prodApiRoot = `https://services.bcpl.info${apiPath}`;
+const apiPath = "api/structured-content/blog";
+const testApiRoot = `https://testservices.bcpl.info/${apiPath}`;
+const prodApiRoot = `https://services.bcpl.info/${apiPath}`;
 
 /**
  * Run Startup Code
