@@ -15,7 +15,7 @@ const Run = () => {
   const localApiRoot =
     window.location.hostname.indexOf("beta") > -1
       ? testApiRoot
-      : `//localhost:54727/${apiPath}`;
+      : `//localhost:54453/${apiPath}`;
 
   const configValues = {
     local: {

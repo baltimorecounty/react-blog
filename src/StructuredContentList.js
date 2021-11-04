@@ -242,7 +242,7 @@ class StructureContentList extends Component {
         const shouldShowCardList = !isLoading || blogEntries.length > 0;
         const shouldShowLoadMore =
             viewModel.TotalPages && !isLoading && shouldLoadMoreBeVisible;
-
+        
         return (
             <div className="Blog container wrapper">
                 <div className="filters">
@@ -266,13 +266,19 @@ class StructureContentList extends Component {
                             .map((item, itemIndex) => (
                                 <BlogCardSkeleton key={itemIndex} />
                             ))}
-                    {shouldShowCardList && (
+                    {shouldShowCardList ===true && blogEntries.length > 0?  (
                         <CardList
                             contentType="blog"
                             contentItems={blogEntries}
                             cardContentComponent={cardContentComponent}
                         />
-                    )}
+                    ): <Card>
+                            <p>
+                                <em>
+                                    There are not any blog entires for current year.
+                                </em>
+                            </p>
+                        </Card>}
                     {isLoading && <Loader />}
                     {hasErrorGettingEntries && (
                         <Card>
